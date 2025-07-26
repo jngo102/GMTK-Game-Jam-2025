@@ -14,9 +14,9 @@ jobs:
         target:
           [
             { channel: html5, name: WebGL },
-            { channel: linux, name: Linux Mono },
-            { channel: osx, name: macOS Mono },
-            { channel: windows, name: Windows Mono },
+            { channel: linux, name: StandaloneLinux64 },
+            { channel: osx, name: StandaloneOSX },
+            { channel: windows, name: StandaloneWindows64 },
           ]
     steps:
       - name: Checkout
