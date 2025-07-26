@@ -1,0 +1,52 @@
+name: Build and Deploy
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          [
+            { channel: html5, name: WebGL },
+            { channel: linux, name: Linux Mono },
+            { channel: osx, name: macOS Mono },
+            { channel: windows, name: Windows Mono },
+          ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          submodules: recursive
+
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+
+      - name: Build ${{ matrix.target.name }}
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.target.name }}
+
+      - name: Deploy to Itch.io
+        uses: yeslayla/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: ${{ matrix.target.channel }}
+          ITCH_GAME: ${{ secrets.ITCH_GAME }}
+          ITCH_USER: ${{ secrets.ITCH_USER }}
+          PACKAGE: build

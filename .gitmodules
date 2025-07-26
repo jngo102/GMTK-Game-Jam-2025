@@ -1,0 +1,6 @@
+[submodule "Assets/Plugins"]
+	path = Assets/Plugins
+	url = https://github.com/Spritehouse-Studio/GMTK-Game-Jam-2025-Plugins.git
+[submodule "Assets/Rewired"]
+	path = Assets/Rewired
+	url = https://github.com/Spritehouse-Studio/Rewired.git
