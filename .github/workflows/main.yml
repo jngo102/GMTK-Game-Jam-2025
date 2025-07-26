@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    concurrency:
+      group: unity-build
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
@@ -24,6 +27,7 @@ jobs:
         with:
           lfs: true
           submodules: recursive
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Cache
         uses: actions/cache@v4
