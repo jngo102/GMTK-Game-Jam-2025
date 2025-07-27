@@ -45,7 +45,10 @@ jobs:
           targetPlatform: ${{ matrix.target.name }}
 
       - name: Remove DoNotShip folder
-        run: rm -rf build/${{ matrix.target.name }}/*_BurstDebugInformation_DoNotShip
+        run: |
+          rm -rf build/${{ matrix.target.name }}/*_BurstDebugInformation_DoNotShip
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Deploy to Itch.io
         uses: yeslayla/butler-publish-itchio-action@master
