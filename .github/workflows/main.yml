@@ -41,7 +41,11 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          buildName: ${{ secrets.ITCH_GAME }}
           targetPlatform: ${{ matrix.target.name }}
+
+      - name: Remove DoNotShip folder
+        run: rm -rf build/${{ matrix.target.name }}/*_BurstDebugInformation_DoNotShip
 
       - name: Deploy to Itch.io
         uses: yeslayla/butler-publish-itchio-action@master
@@ -50,4 +54,4 @@ jobs:
           CHANNEL: ${{ matrix.target.channel }}
           ITCH_GAME: ${{ secrets.ITCH_GAME }}
           ITCH_USER: ${{ secrets.ITCH_USER }}
-          PACKAGE: build
+          PACKAGE: build/${{ matrix.target.name }}
