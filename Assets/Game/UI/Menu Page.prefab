@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5405564510186955969}
   - component: {fileID: 1532055802034099548}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Menu Page
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,7 +250,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7630433942203089695}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
