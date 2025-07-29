@@ -39,7 +39,7 @@ public class MainMenu : MonoBehaviour {
 
     public void StartGame()
     {
-        
+        SceneChanger.Instance.ChangeScene("Main Menu");
     }
 
     /// <summary>

@@ -22,5 +22,6 @@ public static class SingletonManager
         var gameManager = GameManager.Instance;
         var uiManager = UIManager.Instance;
         var saveManager = SaveManager.Instance;
+        var sceneChanger = SceneChanger.Instance;
     }
 }

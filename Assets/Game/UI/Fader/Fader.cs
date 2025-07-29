@@ -1,27 +1,18 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 /// <summary>
 ///     Controller for the fader user interface.
 /// </summary>
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(Image))]
 public class Fader : BaseUI {
     private Animator animator;
-    private Image image;
 
     private void Awake() {
         animator = GetComponent<Animator>();
-        image = GetComponent<Image>();
-    }
-
-    private void Update()
-    {
-        if (animator.IsPlaying())
-        {
-        }
     }
 
     /// <inheritdoc />

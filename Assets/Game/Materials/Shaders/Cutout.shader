@@ -2,12 +2,13 @@ Shader "Custom/Cutout"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "" {}
+        _MainTex("Texture", 2D) = "" {}
+        _Tint("Tint", Color) = (1, 1, 1, 1)
         _CutoutTex("Cutout Texture", 2D) = "white" {}
     }
     SubShader
     {
-        Tags { "RenderType" = "Opaque" }
+        Tags { "RenderType" = "Transparent" }
         LOD 100
 
         Pass
@@ -34,6 +35,7 @@ Shader "Custom/Cutout"
             float4 _MainTex_ST;
             sampler2D _CutoutTex;
             float4 _CutoutTex_ST;
+            float4 _Tint;
 
             v2f vert (appdata v)
             {
@@ -45,12 +47,9 @@ Shader "Custom/Cutout"
 
             fixed4 frag (v2f input) : SV_Target
             {
-                fixed4 color = tex2D(_MainTex, input.uv);
+                fixed4 color = tex2D(_MainTex, input.uv) * _Tint;
                 fixed4 cutout = tex2D(_CutoutTex, input.uv);
-                if (cutout.a > 0)
-                {
-                    color.a = 0;
-                }
+                color.a -= cutout.a;
                 return color;
             }
             ENDCG
