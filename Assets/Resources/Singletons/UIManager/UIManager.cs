@@ -16,12 +16,12 @@ public class UIManager : Singleton<UIManager>, ISaveable {
     /// </summary>
     [SerializeField] private BaseUI[] uiPrefabs;
 
-    private UIInputActions inputActions;
+    private PlayerInputActions inputActions;
 
     /// <summary>
     ///     User interface input actions.
     /// </summary>
-    public UIInputActions.UIActions Actions => inputActions.UI;
+    public PlayerInputActions.UIActions Actions => inputActions.UI;
 
     /// <summary>
     ///     A reference instance of player actions for input rebinding.
@@ -36,13 +36,14 @@ public class UIManager : Singleton<UIManager>, ISaveable {
     }
 
     /// <inheritdoc />
-    public void SaveData(SaveData saveData) {
+    public void SaveData(SaveData saveData)
+    {
         saveData.bindingOverrides = ReferencePlayerActions.asset.SaveBindingOverridesAsJson();
     }
 
     /// <inheritdoc />
     protected override void OnAwake() {
-        inputActions = new UIInputActions();
+        inputActions = new PlayerInputActions();
         inputActions.Enable();
         ReferencePlayerActions = new PlayerInputActions();
         SceneManager.activeSceneChanged += OnSceneChange;

@@ -24,6 +24,7 @@ public class PauseMenu : BaseUI {
     /// </summary>
     /// <param name="context"></param>
     private void OnCancel(InputAction.CallbackContext context) {
+        if (!SceneData.IsGameplayScene()) return;
         CloseExitConfirmation();
         Toggle();
     }

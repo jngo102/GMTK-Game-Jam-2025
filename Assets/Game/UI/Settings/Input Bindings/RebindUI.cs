@@ -1,26 +1,21 @@
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 /// <summary>
 ///     Handles the rebinding of a single input action.
 /// </summary>
-public class RebindUI : MonoBehaviour {
+public class RebindUI : MonoBehaviour
+{
+    private const string UnboundString = "<Unbound>";
+
     /// <summary>
     ///     The name of the action.
     /// </summary>
-    [SerializeField] private string actionName;
-
-    /// <summary>
-    ///     Whether the input action is composite.
-    /// </summary>
-    [SerializeField] private bool isComposite;
-
-    /// <summary>
-    ///     The name of the composite input action.
-    /// </summary>
-    [SerializeField] private string compositeName;
+    public string actionName;
 
     /// <summary>
     ///     The text that displays the name of the action.
@@ -33,62 +28,203 @@ public class RebindUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI keyMouseText;
 
     /// <summary>
-    ///     The index of the input action in the action map's bindings.
+    ///     The text that displays the bound gamepad button.
     /// </summary>
-    private int bindingIndex = -1;
+    [SerializeField] private TextMeshProUGUI gamepadText;
 
     /// <summary>
     ///     The input action that is managed by this UI.
     /// </summary>
     private InputAction inputAction;
 
-    private void Start() {
-        inputAction = UIManager.Instance.ReferencePlayerActions.Player.Get().actions
-            .First(action => action.name == actionName);
-        if (isComposite)
-            bindingIndex = inputAction.bindings.IndexOf(binding =>
-                binding.isPartOfComposite && binding.name == compositeName.ToLower());
-        else
-            bindingIndex = inputAction.bindings.IndexOf(binding => !binding.isComposite);
+    /// <summary>
+    ///     Event sent when a key/mouse button or gamepad button is rebound.
+    /// </summary>
+    public UnityAction<string, string> Rebound;
 
-        actionLabel.text = isComposite ? compositeName : actionName;
-        keyMouseText.text = InputControlPath.ToHumanReadableString(
-            inputAction.bindings[bindingIndex].effectivePath,
-            InputControlPath.HumanReadableStringOptions.OmitDevice);
+    private InputActionMap InputMap => UIManager.Instance.ReferencePlayerActions.Game.Get();
+
+    private InputBinding? KeyMouseBinding
+    {
+        get
+        {
+            var bindingIndex = inputAction.GetBindingIndex(InputBinding.MaskByGroups("Keyboard", "Mouse"));
+            if (bindingIndex < 0)
+            {
+                return null;
+            }
+
+            return inputAction.bindings[bindingIndex];
+        }
+    }
+
+    private InputBinding? GamepadBinding
+    {
+        get
+        {
+            var bindingIndex = inputAction.GetBindingIndex(InputBinding.MaskByGroups("Gamepad"));
+            if (bindingIndex < 0)
+            {
+                return null;
+            }
+
+            return inputAction.bindings[bindingIndex];
+        }
+    }
+
+    private void Start()
+    {
+        inputAction = InputMap.actions.First(action => action.name == actionName);
+
+        actionLabel.text = actionName;
+
+        if (KeyMouseBinding.HasValue)
+        {
+            keyMouseText.text = InputControlPath.ToHumanReadableString(
+                KeyMouseBinding.Value.effectivePath,
+                InputControlPath.HumanReadableStringOptions.OmitDevice);
+        }
+        else
+        {
+            keyMouseText.text = UnboundString;
+        }
+
+        if (GamepadBinding.HasValue)
+        {
+            gamepadText.text = InputControlPath.ToHumanReadableString(
+                GamepadBinding.Value.effectivePath,
+                InputControlPath.HumanReadableStringOptions.OmitDevice);
+        }
+        else
+        {
+            gamepadText.text = UnboundString;
+        }
     }
 
     /// <summary>
     ///     Begin the rebinding process.
     /// </summary>
-    public void StartRebind() {
+    public void StartRebindingKeyMouse()
+    {
         inputAction.Disable();
-        actionLabel.text = "Listening...";
+        keyMouseText.text = "Listening...";
+        var bindingIndex = inputAction.GetBindingIndex(InputBinding.MaskByGroups("Keyboard", "Mouse"));
         inputAction.PerformInteractiveRebinding(bindingIndex)
             .OnMatchWaitForAnother(0.1f)
-            .WithCancelingThrough("<Keyboard>/escape")
-            .OnCancel(RebindCancel)
-            .OnComplete(RebindComplete)
+            .WithCancelingThrough("*/{Cancel}")
+            .OnCancel(RebindCancelKeyMouse)
+            .OnComplete(RebindCompleteKeyMouse)
             .Start();
     }
 
     /// <summary>
-    ///     Callback for when the rebinding process is canceled.
+    ///     Begin the rebinding process.
+    /// </summary>
+    public void StartRebindingGamepad()
+    {
+        inputAction.Disable();
+        gamepadText.text = "Listening...";
+        var bindingIndex = inputAction.GetBindingIndex(InputBinding.MaskByGroups("Gamepad"));
+        inputAction.PerformInteractiveRebinding(bindingIndex)
+            .OnMatchWaitForAnother(0.1f)
+            .WithCancelingThrough("*/{Cancel}")
+            .OnCancel(RebindCancelGamepad)
+            .OnComplete(RebindCompleteGamepad)
+            .Start();
+    }
+
+    public void ClearKeyMouseBinding()
+    {
+        var bindingIndex = inputAction.GetBindingIndex(InputBinding.MaskByGroups("Keyboard", "Mouse"));
+        inputAction.RemoveBindingOverride(bindingIndex);
+        var bindingPath = inputAction.bindings[bindingIndex].effectivePath;
+        keyMouseText.text = InputControlPath.ToHumanReadableString(bindingPath,
+            InputControlPath.HumanReadableStringOptions.OmitDevice);
+        Rebound?.Invoke(actionName, bindingPath);
+    }
+
+    public void ClearGamepadBinding()
+    {
+        var bindingIndex = inputAction.GetBindingIndex(InputBinding.MaskByGroups("Gamepad"));
+        inputAction.RemoveBindingOverride(bindingIndex);
+        var bindingPath = inputAction.bindings[bindingIndex].effectivePath;
+        gamepadText.text = InputControlPath.ToHumanReadableString(bindingPath,
+            InputControlPath.HumanReadableStringOptions.OmitDevice);
+        Rebound?.Invoke(actionName, bindingPath);
+    }
+
+    public void CheckDuplicateBinding(string inputPath)
+    {
+        if (KeyMouseBinding.HasValue && KeyMouseBinding.Value.effectivePath == inputPath)
+        {
+            ClearKeyMouseBinding();
+        }
+        else if (GamepadBinding.HasValue && GamepadBinding.Value.effectivePath == inputPath)
+        {
+            ClearGamepadBinding();
+        }
+    }
+
+    /// <summary>
+    ///     Callback for when the rebinding process is canceled for a key/mouse listener.
     /// </summary>
     /// <param name="operation">The rebinding operation object passed into the callback.</param>
-    private void RebindCancel(InputActionRebindingExtensions.RebindingOperation operation) {
-        actionLabel.text = InputControlPath.ToHumanReadableString(
-            inputAction.bindings[bindingIndex].effectivePath,
+    private void RebindCancelKeyMouse(InputActionRebindingExtensions.RebindingOperation operation)
+    {
+        var action = operation.action;
+        var bindingIndex = action.GetBindingIndex(InputBinding.MaskByGroups("Keyboard", "Mouse"));
+        keyMouseText.text = InputControlPath.ToHumanReadableString(action.bindings[bindingIndex].effectivePath,
             InputControlPath.HumanReadableStringOptions.OmitDevice);
         operation.Dispose();
         operation.action.Enable();
     }
 
     /// <summary>
-    ///     Callback for when the rebinding process is complete.
+    ///     Callback for when the rebinding process is canceled for a gamepad listener.
     /// </summary>
     /// <param name="operation">The rebinding operation object passed into the callback.</param>
-    private void RebindComplete(InputActionRebindingExtensions.RebindingOperation operation) {
-        actionLabel.text = operation.selectedControl.displayName;
+    private void RebindCancelGamepad(InputActionRebindingExtensions.RebindingOperation operation)
+    {
+        var action = operation.action;
+        var bindingIndex = action.GetBindingIndex(InputBinding.MaskByGroups("Gamepad"));
+        gamepadText.text = InputControlPath.ToHumanReadableString(action.bindings[bindingIndex].effectivePath,
+            InputControlPath.HumanReadableStringOptions.OmitDevice);
+        operation.Dispose();
+        operation.action.Enable();
+    }
+
+    /// <summary>
+    ///     Callback for when the rebinding process is complete for a key/mouse listener.
+    /// </summary>
+    /// <param name="operation">The rebinding operation object passed into the callback.</param>
+    private void RebindCompleteKeyMouse(InputActionRebindingExtensions.RebindingOperation operation)
+    {
+        keyMouseText.text = operation.selectedControl.displayName;
+        if (KeyMouseBinding.HasValue)
+        {
+            Rebound?.Invoke(actionName, KeyMouseBinding.Value.effectivePath);
+        }
+
+        CompleteRebind(operation);
+    }
+
+    /// <summary>
+    ///     Callback for when the rebinding process is complete for a gamepad listener.
+    /// </summary>
+    /// <param name="operation">The rebinding operation object passed into the callback.</param>
+    private void RebindCompleteGamepad(InputActionRebindingExtensions.RebindingOperation operation)
+    {
+        gamepadText.text = operation.selectedControl.displayName;
+        if (GamepadBinding.HasValue)
+        {
+            Rebound?.Invoke(actionName, GamepadBinding.Value.effectivePath);
+        }
+
+        CompleteRebind(operation);
+    }
+
+    private void CompleteRebind(InputActionRebindingExtensions.RebindingOperation operation)
+    {
         operation.Dispose();
         operation.action.Enable();
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SaveManager : Singleton<SaveManager>
 {
-    private static string saveFilePath => Path.Combine(Application.persistentDataPath, "save.bin");
+    private static string saveFilePath => Path.Combine(Application.persistentDataPath, "data.bin");
     
     public static SaveData SaveData { get; private set; }
 
@@ -24,6 +24,12 @@ public class SaveManager : Singleton<SaveManager>
         }
         var saveBytes = File.ReadAllBytes(saveFilePath);
         SaveData = SerializationUtility.DeserializeValue<SaveData>(saveBytes, DataFormat.Binary) ?? new SaveData();
+        
+        var saveables = GetSaveables();
+        foreach (var saveable in saveables)
+        {
+            saveable.LoadData(SaveData);
+        }
     }
 
     private void OnApplicationQuit()
@@ -38,6 +44,7 @@ public class SaveManager : Singleton<SaveManager>
         {
             saveable.SaveData(SaveData);
         }
+        
         var saveBytes = SerializationUtility.SerializeValue(SaveData, DataFormat.Binary);
         File.WriteAllBytes(saveFilePath, saveBytes);
     }
