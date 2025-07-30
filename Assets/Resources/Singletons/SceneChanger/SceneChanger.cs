@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneChanger : Singleton<SceneChanger>
@@ -15,8 +14,6 @@ public class SceneChanger : Singleton<SceneChanger>
         var fader = UIManager.Instance.GetUI<Fader>();
         yield return fader.FadeIn();
         yield return loadOp;
-        Debug.Log("START FADE OUT");
         yield return fader.FadeOut();
-        Debug.Log("FADED OUT");
     } 
 }
