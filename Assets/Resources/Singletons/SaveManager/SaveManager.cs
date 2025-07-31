@@ -15,7 +15,7 @@ public class SaveManager : Singleton<SaveManager>
         LoadGame();
     }
 
-    public static void LoadGame()
+    public void LoadGame()
     {
         if (!File.Exists(saveFilePath))
         {
@@ -37,7 +37,7 @@ public class SaveManager : Singleton<SaveManager>
         SaveGame();
     }
 
-    public static void SaveGame()
+    public void SaveGame()
     {
         var saveables = GetSaveables();
         foreach (var saveable in saveables)
@@ -49,7 +49,7 @@ public class SaveManager : Singleton<SaveManager>
         File.WriteAllBytes(saveFilePath, saveBytes);
     }
 
-    private static IEnumerable<ISaveable> GetSaveables()
+    private IEnumerable<ISaveable> GetSaveables()
     {
         return FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<ISaveable>();
     }

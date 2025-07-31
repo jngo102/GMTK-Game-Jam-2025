@@ -42,7 +42,7 @@ public class RebindUI : MonoBehaviour
     /// </summary>
     public UnityAction<string, string> Rebound;
 
-    private InputActionMap InputMap => UIManager.Instance.ReferencePlayerActions.Game.Get();
+    private InputActionMap InputMap => InputManager.Instance.PlayerActions.Game.Get();
 
     private InputBinding? KeyMouseBinding
     {

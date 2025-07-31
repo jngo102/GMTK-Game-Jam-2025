@@ -20,8 +20,9 @@ public static class SingletonManager
     private static void CreateSingletons()
     {
         var gameManager = GameManager.Instance;
-        var uiManager = UIManager.Instance;
         var saveManager = SaveManager.Instance;
         var sceneChanger = SceneChanger.Instance;
+        var uiManager = UIManager.Instance;
+        var inputManager = InputManager.Instance;
     }
 }

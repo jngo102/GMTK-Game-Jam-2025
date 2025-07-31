@@ -9,7 +9,7 @@ public class CreateInputBindingsList : MonoBehaviour
 
     void Awake()
     {
-        foreach (var action in UIManager.Instance.ReferencePlayerActions.Game.Get().actions)
+        foreach (var action in InputManager.Instance.PlayerActions.Game.Get().actions)
         {
             var rebindUI = Instantiate(rebindUIPrefab.gameObject, transform).GetComponent<RebindUI>();
             rebindUI.name = $"{action.name} Rebinder";

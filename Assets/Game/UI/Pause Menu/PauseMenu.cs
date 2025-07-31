@@ -32,13 +32,13 @@ public class PauseMenu : BaseUI {
     /// <inheritdoc />
     public override void Open() {
         base.Open();
-        GameManager.PauseGame();
+        GameManager.Instance.PauseGame();
     }
 
     /// <inheritdoc />
     public override void Close() {
         base.Close();
-        GameManager.ResumeGame();
+        GameManager.Instance.ResumeGame();
     }
 
     /// <summary>

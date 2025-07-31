@@ -30,9 +30,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator ChangeSceneRoutine(string sceneName) {//, SceneTransitionType sceneTransitionType, string entryName) {
         var fader = UIManager.Instance.GetUI<Fader>();
         yield return fader.FadeIn();
-        SaveManager.SaveGame();
         yield return SceneManager.LoadSceneAsync(sceneName);
-        SaveManager.LoadGame();
         // switch (sceneTransitionType) {
         //     case SceneTransitionType.Level when SceneData.IsGameplayScene(sceneName) && entryName != null:
         //         StartLevel(entryName);
@@ -50,7 +48,7 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     ///     Toggle whether the game is paused.
     /// </summary>
-    public static void TogglePause() {
+    public void TogglePause() {
         if (Time.timeScale <= 0)
             ResumeGame();
         else
@@ -60,21 +58,21 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     ///     Pause the game.
     /// </summary>
-    public static void PauseGame() {
+    public void PauseGame() {
         Time.timeScale = 0;
     }
 
     /// <summary>
     ///     Resume the game.
     /// </summary>
-    public static void ResumeGame() {
+    public void ResumeGame() {
         Time.timeScale = 1;
     }
 
     /// <summary>
     ///     Exit the game.
     /// </summary>
-    public static void ExitGame() {
+    public void ExitGame() {
         Application.Quit();
     }
 }

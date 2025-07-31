@@ -39,7 +39,7 @@ public class MainMenu : MonoBehaviour {
 
     public void StartGame()
     {
-        SceneChanger.Instance.ChangeScene("Main Menu");
+        SceneChanger.Instance.ChangeScene("Arena");
     }
 
     /// <summary>
@@ -68,6 +68,6 @@ public class MainMenu : MonoBehaviour {
     ///     Exit the game from the main menu.
     /// </summary>
     public void ExitGame() {
-        GameManager.ExitGame();
+        GameManager.Instance.ExitGame();
     }
 }
