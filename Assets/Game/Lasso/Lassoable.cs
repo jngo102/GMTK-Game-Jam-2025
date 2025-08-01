@@ -27,11 +27,15 @@ public class Lassoable : MonoBehaviour
 
     public void GetLassoed()
     {
-        health.enabled = false;
         gettingLassoed = true;
-        if (mover)
-        {
-            mover.enabled = false;
-        }
+        health.enabled = false;
+        mover.enabled = false;
+    }
+
+    public void LassoReleased()
+    {
+        gettingLassoed = false;
+        health.enabled = true;
+        mover.enabled = true;
     }
 }

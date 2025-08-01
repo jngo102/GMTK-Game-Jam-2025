@@ -47,8 +47,6 @@ public class Lasso : MonoBehaviour
         {
             return;
         }
-        
-        Debug.Log("LASSO HIT");
 
         lassoable.body.AddForce(velocity, ForceMode2D.Impulse);
 
@@ -70,5 +68,7 @@ public class Lasso : MonoBehaviour
             edgeCollider.SetPoints(newPoints.ToList());
             line.SetPositions(newPoints.Select(point => new Vector3(point.x, point.y, 0)).ToArray());
         }
+        
+        UIManager.Instance.camera.AddTarget(transform);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,6 +16,7 @@ public class LassoSpinner : MonoBehaviour
 
     public Animator playerAnim;
     public SpriteRenderer playerSprite;
+    public Facer playerFacer;
     public Sprite playerSpinUpSprite;
     public Sprite playerSpinDownSprite;
     public Sprite playerSpinLeftSprite;
@@ -59,14 +61,11 @@ public class LassoSpinner : MonoBehaviour
         line = GetComponent<LineRenderer>();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (!lasso && isSpinning)
         {
-            isSpinning = false;
-            line.positionCount = 0;
-            line.SetPositions(Array.Empty<Vector3>());
-            playerAnim.enabled = true;
+            StopSpinning();
         }
         else if (isSpinning)
         {
@@ -100,18 +99,29 @@ public class LassoSpinner : MonoBehaviour
 
             if (playerSprite)
             {
-                var scaleX = playerSprite.transform.localScale.x;
-                playerSprite.sprite = anchorToMouseAngle switch
+                playerFacer.enabled = false;
+                playerSprite.transform.localScale = Vector3.one;
+                var angleDeg = anchorToMouseAngle * Mathf.Rad2Deg;
+                if (angleDeg is > -45 and <= 0 or > 0 and <= 45)
                 {
-                    > -Mathf.PI / 4 and < Mathf.PI / 4 when scaleX > 0 => playerSpinRightSprite,
-                    > -Mathf.PI / 4 and < Mathf.PI / 4 when scaleX < 0 => playerSpinLeftSprite,
-                    > Mathf.PI / 4 and < 3 * Mathf.PI / 4 => playerSpinUpSprite,
-                    > 3 * Mathf.PI / 4 and < 5 * Mathf.PI / 4 when scaleX > 0 => playerSpinLeftSprite,
-                    > 3 * Mathf.PI / 4 and < 5 * Mathf.PI / 4 when scaleX < 0 => playerSpinRightSprite,
-                    > 5 * Mathf.PI / 4 and < 7 * Mathf.PI / 4 when scaleX > 0 => playerSpinDownSprite,
-
-                    _ => playerSprite.sprite
-                };
+                    playerSprite.sprite = playerSpinRightSprite;
+                    lasso.line.sortingOrder = 0;
+                }
+                else if (angleDeg is > 45 and <= 135)
+                {
+                    playerSprite.sprite = playerSpinUpSprite;
+                    lasso.line.sortingOrder = 0;
+                }
+                else if (angleDeg is > 135 and <= 180 or > -180 and <= -135)
+                {
+                    playerSprite.sprite = playerSpinLeftSprite;
+                    lasso.line.sortingOrder = 0;
+                }
+                else if (angleDeg is > -135 and < -45)
+                {
+                    playerSprite.sprite = playerSpinDownSprite;
+                    lasso.line.sortingOrder = 100;
+                }
             }
         }
     }
@@ -137,7 +147,21 @@ public class LassoSpinner : MonoBehaviour
         line.SetPosition(1, lasso.transform.position);
         isSpinning = true;
         this.lasso = lasso;
-        this.lassoed = lassoed;
+        this.lassoed = new List<Lassoable>(lassoed);
         lassoedOffsets = lassoed.Select(target => target.transform.position - lasso.transform.position).ToList();
+    }
+
+    public void StopSpinning()
+    {
+        isSpinning = false;
+        line.positionCount = 0;
+        line.SetPositions(Array.Empty<Vector3>());
+        playerAnim.enabled = true;
+        playerFacer.enabled = true;
+        foreach (var target in lassoed)
+        {
+            target.LassoReleased();
+        }
+        lassoed.Clear();
     }
 }

@@ -333,11 +333,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc54681cec4265c4fb67409d08179185, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothing: 0.15
+  smoothing: 0.5
   offset: {x: 0, y: 0, z: -10}
-  minZoom: 3
-  maxZoom: 8
-  padding: 1
+  minHeight: 8
   maxHeight: 4
   shaker: {fileID: 2005929083508316345}
 --- !u!1 &7941486086544091932

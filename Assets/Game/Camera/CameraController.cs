@@ -48,6 +48,11 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    public void SetTargets(params Transform[] newTargets)
+    {
+        targets = newTargets.ToList();
+    }
+
     /// <summary>
     ///     Remove a target from the camera controller's list of targets to follow.
     /// </summary>
@@ -84,9 +89,8 @@ public class CameraController : MonoBehaviour
 
         var centerPoint = GetCenterPoint();
         var newPos = centerPoint + offset;
-        var selfTransform = transform;
-        selfTransform.position =
-            Vector3.Lerp(selfTransform.position, newPos, smooth ?? smoothing);
+        transform.position = Vector3.Lerp(transform.position, newPos, smooth ?? smoothing);
+        
     }
 
     private void FilterTargets()
