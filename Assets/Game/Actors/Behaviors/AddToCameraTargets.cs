@@ -7,7 +7,7 @@ public class AddToCameraTargets : MonoBehaviour
         var mainCam = Camera.main;
         if (mainCam && mainCam.TryGetComponent<CameraController>(out var cameraController))
         {
-            cameraController.AddTarget(transform);
+            cameraController.AddTarget(transform, true);
         }
     }
 }

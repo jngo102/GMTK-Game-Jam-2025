@@ -12,6 +12,12 @@ public class Mover : MonoBehaviour {
     /// </summary>
     [SerializeField] private float moveSpeed = 5;
 
+    [SerializeField] private Animator animator;
+
+    [SerializeField] private string moveAnim;
+    
+    [SerializeField] private string idleAnim;
+    
     private Rigidbody2D body;
     private Facer facer;
 
@@ -26,6 +32,10 @@ public class Mover : MonoBehaviour {
     /// <param name="direction">The direction that the actor moves toward.</param>
     public void Move(Vector2 direction) {
         var velocity = direction * moveSpeed;
+        if (animator)
+        {
+            animator.Play(moveAnim);
+        }
         body.linearVelocity = velocity;
         var velocityX = velocity.x;
         var scaleX = transform.localScale.x;
@@ -40,6 +50,10 @@ public class Mover : MonoBehaviour {
     /// </summary>
     public void Stop()
     {
+        if (animator)
+        {
+            animator.Play(idleAnim);
+        }
         body.linearVelocity = Vector2.zero;
     }
 }

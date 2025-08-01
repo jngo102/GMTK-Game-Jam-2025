@@ -1,15 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(LineRenderer))]
 [RequireComponent(typeof(PolygonCollider2D))]
 public class LassoController : MonoBehaviour
 {
-    [SerializeField] private GameObject linePrefab;
-
-    [SerializeField] private Transform player;
+    [SerializeField] private GameObject lassoPrefab;
 
     public float lineClosedThreshold = 0.5f;
 
@@ -21,11 +21,13 @@ public class LassoController : MonoBehaviour
 
     public UnityEvent LineClosed;
 
-    private EdgeCollider2D lineCollider;
+    public LassoSpinner spinner;
 
     private PolygonCollider2D polyCollider;
 
     private Vector2[] startPoints;
+
+    private Lasso lasso;
 
     private LineRenderer line;
 
@@ -41,8 +43,8 @@ public class LassoController : MonoBehaviour
 
     private Vector2 LassoCenter => polyCollider.bounds.center;
 
-    private float LassoablesArea => LassoedTargets.Sum(target => Mathf.PI * Mathf.Pow(target.Collider.radius, 2));
-    
+    private float LassoablesArea => lassoShrinkRadiusMultiplier * LassoedTargets.Sum(target => Mathf.PI * Mathf.Pow(target.Collider.radius, 2));
+
     public float LassoShrinkTargetRadius
     {
         get
@@ -108,6 +110,7 @@ public class LassoController : MonoBehaviour
 
     private void Awake()
     {
+        line = GetComponent<LineRenderer>();
         polyCollider = GetComponent<PolygonCollider2D>();
     }
 
@@ -115,45 +118,53 @@ public class LassoController : MonoBehaviour
     {
         if (MouseButtonHeld && !drawingLasso)
         {
-            CreateLasso();
+            StartDrawingLasso();
         }
-        else if (MouseButtonHeld && drawingLasso && line && Camera.main)
+        else if (MouseButtonHeld && drawingLasso && Camera.main)
         {
             var position = Camera.main.ScreenToWorldPoint(MousePosition);
             position.z = 0;
             line.positionCount++;
             line.SetPosition(line.positionCount - 1, position);
         }
-        else if (!MouseButtonHeld && drawingLasso && line)
+        else if (!MouseButtonHeld && drawingLasso)
         {
             CheckLineClosed();
         }
-        else if (!drawingLasso && isLassoing && line && HasLassoed && shrinkTimer < lassoShrinkTime)
+        else if (!drawingLasso && isLassoing && lasso && HasLassoed)
         {
             shrinkTimer += Time.deltaTime;
-            var newPoints = new Vector2[lineCollider.pointCount];
-            for (var i = 0; i < lineCollider.pointCount; i++)
+            var newPoints = new Vector2[lasso.edgeCollider.pointCount];
+            for (var i = 0; i < lasso.edgeCollider.pointCount; i++)
             {
                 newPoints[i] = Vector2.Lerp(startPoints[i], LassoShrinkTargetPoints[i],
                     shrinkTimer / lassoShrinkTime);
             }
 
-            lineCollider.SetPoints(newPoints.ToList());
-            line.SetPositions(newPoints.Select(point => new Vector3(point.x, point.y, 0)).ToArray());
+            lasso.edgeCollider.SetPoints(newPoints.ToList());
+            lasso.line.SetPositions(newPoints.Select(point => new Vector3(point.x, point.y, 0)).ToArray());
+
+            if (shrinkTimer > lassoShrinkTime)
+            {
+                isLassoing = false;
+                ParentToSpinner();
+            }
         }
     }
 
-    private void CreateLasso()
+    private void StartDrawingLasso()
     {
         isLassoing = false;
         drawingLasso = true;
-        DestroyLine();
-        polyCollider.enabled = false;
+        line.loop = false;
+        if (lasso)
+        {
+            Destroy(lasso.gameObject);
+        }
 
-        var lineObj = Instantiate(linePrefab);
-        line = lineObj.GetComponent<LineRenderer>();
-        lineCollider = lineObj.GetComponent<EdgeCollider2D>();
-        line.positionCount = 0;
+        LassoedTargets.Clear();
+        ClearLine();
+        polyCollider.enabled = false;
     }
 
     private void CheckLineClosed()
@@ -174,10 +185,7 @@ public class LassoController : MonoBehaviour
         {
             StartLassoing();
         }
-        else
-        {
-            DestroyLine();
-        }
+        ClearLine();
     }
 
     private void StartLassoing()
@@ -199,49 +207,48 @@ public class LassoController : MonoBehaviour
             if (polyCollider.OverlapPoint(lassoable.transform.position))
             {
                 LassoedTargets.Add(lassoable);
+                lassoable.GetLassoed();
             }
         }
 
-        if (!HasLassoed)
-        {
-            DestroyLine();
-            return;
-        }
-        
-        var startPointsVector3 = startPoints.Select(point => new Vector3(point.x, point.y, 0)).ToArray();
-        line.positionCount = pointSamples;
-        line.SetPositions(startPointsVector3);
-        
-        lineCollider.SetPoints(startPoints.ToList());
-        lineCollider.transform.localScale = Vector3.one;
-        line.transform.SetParent(lineCollider.transform);
+        CreateLasso();
+    }
+
+    private void CreateLasso()
+    {
+        var lassoObj = Instantiate(lassoPrefab);
+        lasso = lassoObj.GetComponent<Lasso>();
+        var points = polyCollider.points;
+        lasso.edgeCollider.SetPoints(points.ToList());
+        lasso.line.positionCount = pointSamples;
+        var pointsVector3 = points.Select(point => new Vector3(point.x, point.y, 0)).ToArray();
+        lasso.line.SetPositions(pointsVector3);
     }
 
     private void ClearLassoPoints()
     {
         if (!HasLassoed)
         {
-            DestroyLine();
+            ClearLine();
         }
 
         polyCollider.enabled = false;
     }
 
-    private void DestroyLine()
+    private void ClearLine()
     {
-        Debug.Log("DESTROY LINE");
-        LassoedTargets.Clear();
-        if (line)
-        {
-            Destroy(line.gameObject);
-        }
+        line.positionCount = 0;
+        line.SetPositions(Array.Empty<Vector3>());
     }
 
-    private void ParentToPlayer()
+    private void ParentToSpinner()
     {
-        if (player)
+        if (spinner && lasso)
         {
-            transform.SetParent(player);
+            lasso.lassoed = LassoedTargets;
+            lasso.RepositionCenter();
+            lasso.edgeCollider.enabled = false;
+            spinner.StartSpinning(lasso, LassoedTargets);
         }
     }
 

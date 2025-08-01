@@ -4,8 +4,8 @@ using UnityEngine.Events;
 /// <summary>
 ///     Handles the actor's state of health.
 /// </summary>
-[RequireComponent(typeof(Facer))]
-public class Health : MonoBehaviour {
+public class Health : MonoBehaviour
+{
     public UnityAction<float, Damager> Harmed;
 
     public UnityAction<float, float> HealthChanged;
@@ -27,14 +27,16 @@ public class Health : MonoBehaviour {
 
     private float currentInvincibilityTime;
 
-    private Facer facer;
+    [SerializeField] private Facer facer;
 
     /// <summary>
     ///     The actor's current health.
     /// </summary>
-    public float CurrentHealth {
+    public float CurrentHealth
+    {
         get => currentHealth;
-        set {
+        set
+        {
             currentHealth = Mathf.Clamp(value, 0, MaxHealth);
             HealthChanged?.Invoke(CurrentHealth, MaxHealth);
         }
@@ -43,9 +45,11 @@ public class Health : MonoBehaviour {
     /// <summary>
     ///     The maximum amount of health that the actor can have.
     /// </summary>
-    public float MaxHealth {
+    public float MaxHealth
+    {
         get => maxHealth;
-        set {
+        set
+        {
             maxHealth = Mathf.Clamp(value, 0, MaxHealth);
             CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth);
         }
@@ -56,17 +60,25 @@ public class Health : MonoBehaviour {
     /// </summary>
     public bool CanBeHurt { get; set; } = true;
 
-    private void Awake() {
-        facer = GetComponent<Facer>();
-
+    private void Awake()
+    {
         currentInvincibilityTime = invincibilityTime + 1;
     }
 
-    private void Update() {
+    private void Update()
+    {
         if (currentInvincibilityTime < invincibilityTime)
             currentInvincibilityTime = Mathf.Clamp(currentInvincibilityTime + Time.deltaTime, 0, invincibilityTime + 1);
         else
             CanBeHurt = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.TryGetComponent<Damager>(out var damager))
+        {
+            Hurt(damager.damageAmount, damager);
+        }
     }
 
     /// <summary>
@@ -74,9 +86,14 @@ public class Health : MonoBehaviour {
     /// </summary>
     /// <param name="damageAmount">The amount of damage inflicted.</param>
     /// <param name="damageSource">The source of the damage.</param>
-    public void Hurt(float damageAmount, Damager damageSource) {
+    public void Hurt(float damageAmount, Damager damageSource)
+    {
         if (!CanBeHurt) return;
-        if (damageSource != null) facer.FaceObject(damageSource.transform);
+        if (damageSource)
+        {
+            facer.FaceObject(damageSource.transform);
+        }
+
         CurrentHealth -= Mathf.Clamp(damageAmount, 0, CurrentHealth);
         Harmed?.Invoke(damageAmount, damageSource);
         CanBeHurt = false;
@@ -87,21 +104,24 @@ public class Health : MonoBehaviour {
     ///     Heal the actor.
     /// </summary>
     /// <param name="healAmount">The amount of health to heal for.</param>
-    public void Heal(float healAmount) {
+    public void Heal(float healAmount)
+    {
         CurrentHealth += Mathf.Clamp(healAmount, 0, MaxHealth - CurrentHealth);
     }
 
     /// <summary>
     ///     Fully heal the actor.
     /// </summary>
-    public void FullHeal() {
+    public void FullHeal()
+    {
         Heal(MaxHealth - CurrentHealth);
     }
 
     /// <summary>
     ///     Instantly take away all of the actor's health.
     /// </summary>
-    public void InstantKill() {
+    public void InstantKill()
+    {
         Hurt(CurrentHealth, null);
     }
 }

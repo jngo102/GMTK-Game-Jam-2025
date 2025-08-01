@@ -69,6 +69,18 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = 1;
     }
 
+    public void HitStop(float duration = 0.1f)
+    {
+        StartCoroutine(HitStopRoutine(duration));
+    }
+
+    private IEnumerator HitStopRoutine(float duration)
+    {
+        Time.timeScale = 0;
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = 1;
+    }
+
     /// <summary>
     ///     Exit the game.
     /// </summary>

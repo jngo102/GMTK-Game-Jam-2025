@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -6,112 +8,147 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(Camera))]
 [RequireComponent(typeof(Shaker))]
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour
+{
     [SerializeField] private float smoothing = 0.5f;
     [SerializeField] private Vector3 offset;
-    [SerializeField] private float minZoom = 40;
-    [SerializeField] private float maxZoom = 10;
-    [SerializeField] private float zoomLimit = 50;
+    [SerializeField] private float minHeight = 8;
+    [SerializeField] private float maxHeight = 32;
 
-    private readonly List<Transform> targets = new();
+    private List<Transform> targets = new();
     private new Camera camera;
-    private Shaker shaker;
+    public Shaker shaker;
     private Vector3 velocity;
-    
-    private void Awake() {
+
+    private void Awake()
+    {
         camera = GetComponent<Camera>();
         shaker = GetComponent<Shaker>();
         GameManager.Instance.LevelStarted += ResetPosition;
     }
 
-    private void LateUpdate() {
+    private void LateUpdate()
+    {
+        FilterTargets();
         KeepTargetsInFrame();
     }
-    
+
     /// <summary>
     ///     Add a target to the camera controller's list of targets to follow.
     /// </summary>
     /// <param name="target"></param>
-    public void AddTarget(Transform target) {
+    /// <param name="immediate">Whether to snap immediately to the new target.</param>
+    public void AddTarget(Transform target, bool immediate = false)
+    {
         targets.Add(target);
+        if (immediate)
+        {
+            FollowPosition();
+            FollowZoom();
+        }
     }
-    
+
     /// <summary>
     ///     Remove a target from the camera controller's list of targets to follow.
     /// </summary>
     /// <param name="target"></param>
-    public void RemoveTarget(Transform target) {
+    public void RemoveTarget(Transform target)
+    {
         targets.Remove(target);
     }
 
     /// <summary>
     ///     Reset the camera to the targets' positions.
     /// </summary>
-    private void ResetPosition() {
-        FollowPosition(false);
-        FollowZoom(false);
+    private void ResetPosition()
+    {
+        FollowPosition();
+        FollowZoom();
     }
 
     /// <summary>
     ///     Keep all targets in the camera's view.
     /// </summary>
-    private void KeepTargetsInFrame() {
+    private void KeepTargetsInFrame()
+    {
         FollowPosition();
         FollowZoom();
     }
-    
+
     /// <summary>
     ///     Follow targets, modifying the camera's position.
     /// </summary>
-    /// <param name="smooth">Whether to smooth the position change.</param>
-    private void FollowPosition(bool smooth = true) {
+    private void FollowPosition(float? smooth = null)
+    {
         if (targets.Count <= 0) return;
 
         var centerPoint = GetCenterPoint();
         var newPos = centerPoint + offset;
         var selfTransform = transform;
         selfTransform.position =
-            smooth ? Vector3.SmoothDamp(selfTransform.position, newPos, ref velocity, smoothing) : newPos;
+            Vector3.Lerp(selfTransform.position, newPos, smooth ?? smoothing);
+    }
+
+    private void FilterTargets()
+    {
+        for (var i = targets.Count - 1; i >= 0; i--)
+        {
+            var target = targets[i];
+            if (!target)
+            {
+                RemoveTarget(target);
+            }
+        }
     }
 
     /// <summary>
     ///     Follow targets, modifying the camera's zoom.
     /// </summary>
-    /// <param name="smooth">Whether to smooth the zoom change.</param>
-    private void FollowZoom(bool smooth = true) {
+    private void FollowZoom(float? smooth = null)
+    {
         if (targets.Count <= 0) return;
-        
-        var newZoom = Mathf.Lerp(maxZoom, minZoom, GetMaxDistance() / zoomLimit);
-        camera.fieldOfView = smooth ? Mathf.Lerp(camera.fieldOfView, newZoom, Time.deltaTime) : newZoom;
+
+        var newZoom = GetTargetZoom() / 2;
+        camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, newZoom, smooth ?? smoothing);
     }
 
     /// <summary>
     /// Get the maximum horizontal distance between all targets.
     /// </summary>
     /// <returns>The maximum horizontal distance between all targets.</returns>
-    private float GetMaxDistance() {
-        var bounds = new Bounds(targets[0].position, Vector3.zero);
-        foreach (var target in targets) {
-            bounds.Encapsulate(target.position);
+    private float GetTargetZoom()
+    {
+        if (targets.Count <= 0)
+        {
+            return minHeight;
         }
 
-        return bounds.size.x;
+        var maxTargetY = targets.Max(target => target.transform.position.y);
+        var minTargetY = targets.Min(target => target.transform.position.y);
+        var height = maxTargetY - minTargetY;
+        return Mathf.Max(minHeight, Mathf.Min(height, maxHeight));
     }
 
     /// <summary>
     /// Get the center point among all targets.
     /// </summary>
     /// <returns>The center point among all targets.</returns>
-    private Vector3 GetCenterPoint() {
-        if (targets.Count == 1) {
+    private Vector3 GetCenterPoint()
+    {
+        if (targets.Count <= 0)
+        {
+            return Vector3.zero;
+        }
+
+        if (targets.Count == 1)
+        {
             return targets[0].position;
         }
 
-        var bounds = new Bounds(targets[0].position, Vector3.zero);
-        foreach (var target in targets) {
-            bounds.Encapsulate(target.position);
-        }
-
-        return bounds.center;
+        var maxTargetX = targets.Max(target => target.transform.position.x);
+        var maxTargetY = targets.Max(target => target.transform.position.y);
+        var minTargetX = targets.Min(target => target.transform.position.x);
+        var minTargetY = targets.Min(target => target.transform.position.y);
+        return new Vector3(minTargetX + (maxTargetX - minTargetX) / 2, minTargetY + (maxTargetY - minTargetY) / 2, 0);
     }
 }

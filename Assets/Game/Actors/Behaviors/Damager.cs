@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 ///     Deals damage to an actor.
@@ -8,12 +9,14 @@ public class Damager : MonoBehaviour {
     /// <summary>
     ///     The amount of damage to deal.
     /// </summary>
-    [SerializeField] private float damageAmount = 1;
+    [SerializeField] public float damageAmount = 1;
 
+    public UnityAction<Health, float> Damaged;
+    
     private void OnTriggerEnter2D(Collider2D other) {
-        if (other.TryGetComponent<Health>(out var healthManager))
+        if (other.TryGetComponent<Health>(out var health))
         {
-            healthManager.Hurt(damageAmount, this);
+            Damaged?.Invoke(health, damageAmount);
         }
     }
 }

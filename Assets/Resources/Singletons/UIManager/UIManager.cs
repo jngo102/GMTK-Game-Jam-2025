@@ -10,6 +10,8 @@ public class UIManager : Singleton<UIManager> {
     /// </summary>
     [SerializeField] private Canvas canvas;
 
+    public CameraController camera;
+
     /// <summary>
     ///     All the user interface prefabs that are managed by the ui manager.
     /// </summary>

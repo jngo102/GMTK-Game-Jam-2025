@@ -5,15 +5,10 @@ using UnityEngine.Events;
 /// <summary>
 ///     Deals with facing an actor towards a target and flipping their scale.
 /// </summary>
-[RequireComponent(typeof(Rigidbody2D))]
 public class Facer : MonoBehaviour {
     public UnityAction Flipped;
     
-    private Rigidbody2D body;
-
-    private void Awake() {
-        body = GetComponent<Rigidbody2D>();
-    }
+    [SerializeField] private Rigidbody2D body;
 
     /// <summary>
     ///     Face a target object.

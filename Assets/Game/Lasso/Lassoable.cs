@@ -1,13 +1,19 @@
-using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CircleCollider2D))]
 public class Lassoable : MonoBehaviour
 {
-    private Animator animator;
+    public Animator animator;
     public CircleCollider2D Collider { get; private set; }
 
+    public float weight = 1;
+
+    public Mover mover;
+
+    public Health health;
+
+    public Rigidbody2D body;
+    
     private bool gettingLassoed;
 
     private Vector2 targetPosition;
@@ -16,22 +22,16 @@ public class Lassoable : MonoBehaviour
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
         Collider = GetComponent<CircleCollider2D>();
     }
 
-    private void Update()
+    public void GetLassoed()
     {
-        if (gettingLassoed)
-        {
-            
-        }
-    }
-
-    public void GetLassoed(LassoController lasso, Vector2 targetPosition)
-    {
+        health.enabled = false;
         gettingLassoed = true;
-        this.lasso = lasso;
-        this.targetPosition = targetPosition;
+        if (mover)
+        {
+            mover.enabled = false;
+        }
     }
 }

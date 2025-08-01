@@ -1,18 +1,18 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 ///     Handles an actor's death.
 /// </summary>
-[RequireComponent(typeof(Health))]
 public class DeathManager : MonoBehaviour {
-    public delegate void OnDeath();
-
     /// <summary>
     ///     The corpse object to create once the actor has died.
     /// </summary>
     [SerializeField] private GameObject corpsePrefab;
 
-    private Health health;
+    [SerializeField] private Health health;
+
+    public GameObject deathObj;
 
     /// <summary>
     ///     Whether the actor is dead.
@@ -20,7 +20,6 @@ public class DeathManager : MonoBehaviour {
     public bool IsDead { get; private set; }
 
     private void Awake() {
-        health = GetComponent<Health>();
         // Check whether the actor should be dead every time it takes damage.
         health.Harmed += CheckDead;
     }
@@ -28,7 +27,7 @@ public class DeathManager : MonoBehaviour {
     /// <summary>
     ///     Raised when the actor has died.
     /// </summary>
-    public event OnDeath Died;
+    public UnityAction Died;
 
     /// <summary>
     ///     Check whether the actor's health has reached zero.
@@ -53,7 +52,10 @@ public class DeathManager : MonoBehaviour {
             corpse.GetComponent<Facer>().FaceObject(damageSource.transform);
         }
 
-        Destroy(gameObject);
+        if (deathObj)
+        {
+            Destroy(deathObj);   
+        }
     }
 
     /// <summary>

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -48,6 +49,22 @@ public class PlayerInputHandler : MonoBehaviour
         mover = GetComponent<Mover>();
     }
 
+    private void Update()
+    {
+        if (gameActions.HasValue)
+        {
+            var moveVector = gameActions.Value.Move.ReadValue<Vector2>();
+            if (moveVector.magnitude > 0)
+            {
+                mover.Move(moveVector);
+            }
+            else
+            {
+                mover.Stop();
+            }
+        }
+    }
+
     private void OnEnable()
     {
         Enable();
@@ -57,9 +74,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (gameActions.HasValue)
         {
-            gameActions.Value.Enable();
-            gameActions.Value.Move.performed += OnMove;
-            gameActions.Value.Move.canceled += OnStop;    
+            gameActions.Value.Enable();   
         }
     }
 
@@ -73,19 +88,6 @@ public class PlayerInputHandler : MonoBehaviour
         if (gameActions.HasValue)
         {
             gameActions.Value.Disable();
-            gameActions.Value.Move.performed -= OnMove;
-            gameActions.Value.Move.canceled -= OnStop;    
         }
-    }
-
-    private void OnMove(InputAction.CallbackContext ctx)
-    {
-        var vector = ctx.ReadValue<Vector2>();
-        mover.Move(vector);
-    }
-    
-    private void OnStop(InputAction.CallbackContext ctx)
-    {
-        mover.Stop();
     }
 }
