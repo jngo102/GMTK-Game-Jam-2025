@@ -54,6 +54,9 @@ public class DeathSpin : MonoBehaviour
         body.gravityScale = 1;
         body.constraints = RigidbodyConstraints2D.None;
         isSpinning = true;
+        var currentSprite = sprite.sprite;
+        var newSprite = Sprite.Create(currentSprite.texture, currentSprite.rect, Vector2.one * 0.5f);
+        sprite.sprite = newSprite;
         var spriteColor = sprite.color;
         sprite.color = new Color(spriteColor.r, spriteColor.g, spriteColor.b, 0.5f);
         particles.Play();

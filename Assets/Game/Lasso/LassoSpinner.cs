@@ -21,18 +21,25 @@ public class LassoSpinner : MonoBehaviour
     public Sprite playerSpinLeftSprite;
     public Sprite playerSpinRightSprite;
 
+
     public Lasso lasso;
 
-    private List<Lassoable> lassoed;
+    private List<Lassoable> lassoed = new();
     private List<Vector3> lassoedOffsets;
 
     private Damager LassoDamager => lasso?.GetComponent<Damager>();
 
-    private float TotalWeight => lassoed.Sum(target => target.weight);
+    private float TotalMass => lassoed.Sum(target => target.body.mass);
 
     private LineRenderer line;
 
-    public float spinSpeed;
+    [Header("Audio")]
+    public string fmodSpinEvent;
+
+    public float spinTimeScale = 4;
+    public float spinTimeLogFactor = 10;
+    private float spinEventTime;
+    private float spinTimer;
 
     public bool isSpinning;
 
@@ -77,11 +84,12 @@ public class LassoSpinner : MonoBehaviour
                                       new Vector3(Mathf.Cos(anchorToMouseAngle), Mathf.Sin(anchorToMouseAngle), 0) *
                                       targetLassoVectorLength;
             var nextLassoPosition = Vector3.Lerp(lasso.transform.position, targetLassoPosition,
-                mouseTrackSpeedMultiplier * Time.deltaTime / TotalWeight);
+                mouseTrackSpeedMultiplier * Time.deltaTime / TotalMass);
 
             // Debug.Log("Next Lasso pos: " +  nextLassoPosition);
 
-            lasso.velocity = nextLassoPosition - previousLassoPosition;
+            var velocity = nextLassoPosition - previousLassoPosition;
+            lasso.velocity = velocity;
             lasso.transform.position = nextLassoPosition;
 
             line.SetPosition(1, nextLassoPosition);
@@ -96,32 +104,9 @@ public class LassoSpinner : MonoBehaviour
                     new Vector3(nextLassoPosition.x, nextLassoPosition.y, 0) + lassoedOffsets[i];
             }
 
-            if (playerSprite)
-            {
-                playerFacer.enabled = false;
-                playerSprite.transform.localScale = Vector3.one;
-                var angleDeg = anchorToMouseAngle * Mathf.Rad2Deg;
-                if (angleDeg is > -45 and <= 0 or > 0 and <= 45)
-                {
-                    playerSprite.sprite = playerSpinRightSprite;
-                    lasso.line.sortingOrder = 0;
-                }
-                else if (angleDeg is > 45 and <= 135)
-                {
-                    playerSprite.sprite = playerSpinUpSprite;
-                    lasso.line.sortingOrder = 0;
-                }
-                else if (angleDeg is > 135 and <= 180 or > -180 and <= -135)
-                {
-                    playerSprite.sprite = playerSpinLeftSprite;
-                    lasso.line.sortingOrder = 0;
-                }
-                else if (angleDeg is > -135 and < -45)
-                {
-                    playerSprite.sprite = playerSpinDownSprite;
-                    lasso.line.sortingOrder = 100;
-                }
-            }
+            UpdatePlayerSprite(anchorToMouseAngle);
+
+            UpdateSpinSound(velocity.magnitude);
         }
     }
 
@@ -146,8 +131,17 @@ public class LassoSpinner : MonoBehaviour
         line.SetPosition(1, lasso.transform.position);
         isSpinning = true;
         this.lasso = lasso;
-        this.lassoed = new List<Lassoable>(lassoed);
-        lassoedOffsets = lassoed.Select(target => target.transform.position - lasso.transform.position).ToList();
+        foreach (var target in lassoed)
+        {
+            if (target.death.IsDead)
+            {
+                target.LassoReleased();
+                continue;
+            }
+            
+            this.lassoed.Add(target);
+        }
+        lassoedOffsets = this.lassoed.Select(target => target.transform.position - lasso.transform.position).ToList();
     }
 
     public void StopSpinning()
@@ -162,5 +156,51 @@ public class LassoSpinner : MonoBehaviour
             target.LassoReleased();
         }
         lassoed.Clear();
+    }
+
+    private void UpdatePlayerSprite(float angle)
+    {
+        if (playerSprite)
+        {
+            playerFacer.enabled = false;
+            playerSprite.transform.localScale = Vector3.one;
+            var angleDeg = angle * Mathf.Rad2Deg;
+            if (angleDeg is > -45 and <= 0 or > 0 and <= 45)
+            {
+                playerSprite.sprite = playerSpinRightSprite;
+                lasso.line.sortingOrder = 0;
+            }
+            else if (angleDeg is > 45 and <= 135)
+            {
+                playerSprite.sprite = playerSpinUpSprite;
+                lasso.line.sortingOrder = 0;
+            }
+            else if (angleDeg is > 135 and <= 180 or > -180 and <= -135)
+            {
+                playerSprite.sprite = playerSpinLeftSprite;
+                lasso.line.sortingOrder = 0;
+            }
+            else if (angleDeg is > -135 and < -45)
+            {
+                playerSprite.sprite = playerSpinDownSprite;
+                lasso.line.sortingOrder = 100;
+            }
+        }
+    }
+    
+    private void UpdateSpinSound(float lassoSpeed)
+    {
+        if (!string.IsNullOrEmpty(fmodSpinEvent) && playerSprite)
+        {
+            spinEventTime = Mathf.Log(spinTimeScale * lassoed.Count / lasso.velocity.magnitude, spinTimeLogFactor);
+            spinTimer += Time.deltaTime;
+            if (spinTimer >= spinEventTime)
+            {
+                spinTimer = 0;
+                
+                FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Force", TotalMass);
+                FMODUnity.RuntimeManager.PlayOneShot(fmodSpinEvent, playerSprite.transform.position);
+            }
+        }
     }
 }

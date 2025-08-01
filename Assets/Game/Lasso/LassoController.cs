@@ -11,6 +11,7 @@ public class LassoController : MonoBehaviour
 {
     [SerializeField] private GameObject lassoPrefab;
 
+    public float maxDrawLength = 32;
     public float lineClosedThreshold = 0.5f;
 
     [SerializeField] private int pointSamples = 128;
@@ -43,7 +44,11 @@ public class LassoController : MonoBehaviour
 
     private Vector2 LassoCenter => polyCollider.bounds.center;
 
-    private float LassoablesArea => lassoShrinkRadiusMultiplier * LassoedTargets.Sum(target => Mathf.PI * Mathf.Pow(target.Collider.radius, 2));
+    private float LassoablesArea => lassoShrinkRadiusMultiplier * LassoedTargets.Sum(target =>
+    {
+        var boundsSize = target.Collider.bounds.size;
+        return Mathf.PI * Mathf.Pow(boundsSize.x * boundsSize.y, 2);
+    });
 
     public float LassoShrinkTargetRadius
     {
@@ -122,6 +127,22 @@ public class LassoController : MonoBehaviour
         }
         else if (MouseButtonHeld && drawingLasso && Camera.main)
         {
+            var linePositionCount = line.positionCount;
+            var positions = new Vector3[linePositionCount];
+            line.GetPositions(positions);
+            float lineLength = 0;
+            for (var i = 1; i < linePositionCount; i++)
+            {
+                var pointToPoint = (positions[i] - positions[i - 1]).magnitude;
+                lineLength += pointToPoint;
+            }
+
+            if (lineLength > maxDrawLength)
+            {
+                line.startColor = line.endColor = Color.red;
+                return;
+            }
+            
             var position = Camera.main.ScreenToWorldPoint(MousePosition);
             position.z = 0;
             line.positionCount++;
@@ -154,6 +175,8 @@ public class LassoController : MonoBehaviour
 
     private void StartDrawingLasso()
     {
+        line.startColor = line.endColor = Color.white;
+        
         isLassoing = false;
         drawingLasso = true;
         line.loop = false;
@@ -191,6 +214,9 @@ public class LassoController : MonoBehaviour
     private void StartLassoing()
     {
         LineClosed?.Invoke();
+        
+        FMODUnity.RuntimeManager.PlayOneShot("event:/player/PLassoGrab");
+        
         isLassoing = true;
         line.loop = true;
         shrinkTimer = 0;

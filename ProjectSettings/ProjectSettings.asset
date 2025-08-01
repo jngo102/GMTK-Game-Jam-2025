@@ -16,7 +16,7 @@ PlayerSettings:
   productName: Lasso Hassle
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  m_SplashScreenBackgroundColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+  m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 0
   m_SplashScreenOverlayOpacity: 1
@@ -41,6 +41,8 @@ PlayerSettings:
     height: 1
   m_SplashScreenLogos:
   - logo: {fileID: 446800865075235414, guid: 42cbe71190e3cb342ae842f789b58be5, type: 3}
+    duration: 2
+  - logo: {fileID: 21300000, guid: 7938efdf0d6798f4d9f7100114887d15, type: 3}
     duration: 2
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}

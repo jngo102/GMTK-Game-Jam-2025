@@ -49,10 +49,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lassoPrefab: {fileID: 3010173829136287020, guid: 94b632dac7444aa48a7aac114599b6c1, type: 3}
+  maxDrawLength: 32
   lineClosedThreshold: 2
   pointSamples: 32
-  lassoShrinkRadiusMultiplier: 0.5
-  lassoShrinkTime: 0.25
+  lassoShrinkRadiusMultiplier: 1
+  lassoShrinkTime: 0.5
   LineClosed:
     m_PersistentCalls:
       m_Calls: []

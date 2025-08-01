@@ -78,8 +78,8 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1567965235
-  m_SortingLayer: 1
+  m_SortingLayerID: 1609630565
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
@@ -227,8 +227,8 @@ MonoBehaviour:
   line: {fileID: 2411260276500031805}
   body: {fileID: 8543788322683253832}
   lassoed: []
-  hitShakeMultiplier: 0.02
-  hitStopMultiplier: 0.025
+  hitShakeMultiplier: 0.005
+  hitStopMultiplier: 0.02
   damageSpeedMultiplier: 2
   damager: {fileID: 7129250917019637877}
   velocity: {x: 0, y: 0}
@@ -244,6 +244,7 @@ GameObject:
   - component: {fileID: 6539442548805975082}
   - component: {fileID: 3613214404438812235}
   - component: {fileID: 7129250917019637877}
+  - component: {fileID: 2700707560014586771}
   m_Layer: 7
   m_Name: Damager
   m_TagString: Untagged
@@ -342,3 +343,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageAmount: 1
+--- !u!114 &2700707560014586771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5398702092211619620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1197701687
+      Data2: 1092126363
+      Data3: 960825791
+      Data4: 1565666691
+    Path: event:/player/PLassoHit
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20

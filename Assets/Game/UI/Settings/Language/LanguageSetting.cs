@@ -14,16 +14,16 @@ public class LanguageSetting : MonoBehaviour, ISaveable {
 
     /// <inheritdoc />
     public void LoadData(SaveData saveData) {
-        var options = dropdown.options;
-        var index = options.IndexOf(options.First(option => option.text == saveData.language));
-        dropdown.value = index;
+        // var options = dropdown.options;
+        // var index = options.IndexOf(options.First(option => option.text == saveData.language));
+        // dropdown.value = index;
         SetLanguage();
     }
 
     /// <inheritdoc />
     public void SaveData(SaveData saveData) {
-        saveData.language = LocalizationSettings.AvailableLocales.GetLocale(dropdown.options[dropdown.value].text)
-            .Identifier.Code;
+        // saveData.language = LocalizationSettings.AvailableLocales.GetLocale(dropdown.options[dropdown.value].text)
+        //     .Identifier.Code;
     }
 
     /// <summary>

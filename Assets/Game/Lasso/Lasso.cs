@@ -12,7 +12,7 @@ public class Lasso : MonoBehaviour
 
     public List<Lassoable> lassoed = new();
 
-    public float hitShakeMultiplier = 0.1f;
+    public float hitShakeMultiplier = 0.11f;
 
     public float hitStopMultiplier = 0.05f;
 
@@ -37,7 +37,8 @@ public class Lasso : MonoBehaviour
 
     private void Update()
     {
-        damager.damageAmount = LassoedCount * damageSpeedMultiplier * Speed;
+        var force = LassoedCount * Speed;
+        damager.damageAmount = damageSpeedMultiplier * force;
     }
 
     private void LassoHit(Health health, float damageAmount)

@@ -76,6 +76,10 @@ PrefabInstance:
       propertyPath: moveSpeed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 825104150841634629, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: fmodFootstepSound
+      value: event:/player/PFootsteps
+      objectReference: {fileID: 0}
     - target: {fileID: 1113854431096868198, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
       propertyPath: m_Name
       value: Player
@@ -126,6 +130,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1113854431096868198, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3222876329373985346}
+    - targetCorrespondingSourceObject: {fileID: 1113854431096868198, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 159163965701494739}
     - targetCorrespondingSourceObject: {fileID: 3517635827245114724, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
       insertIndex: -1
       addedObject: {fileID: 674614214542610419}
@@ -210,6 +217,37 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.10100746, y: 0.22962284}
   m_EdgeRadius: 0
+--- !u!114 &159163965701494739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058965739717825337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1000988478
+      Data2: 1257529763
+      Data3: -2066755704
+      Data4: -288033892
+    Path: event:/player/PFootsteps
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &2537490316327615291 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3517635827245114724, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}

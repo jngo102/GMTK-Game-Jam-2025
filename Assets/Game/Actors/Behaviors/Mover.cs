@@ -17,6 +17,8 @@ public class Mover : MonoBehaviour {
     [SerializeField] private string moveAnim;
     
     [SerializeField] private string idleAnim;
+
+    public string fmodFootstepSound;
     
     private Rigidbody2D body;
     private Facer facer;
@@ -55,5 +57,13 @@ public class Mover : MonoBehaviour {
             animator.Play(idleAnim);
         }
         body.linearVelocity = Vector2.zero;
+    }
+
+    public void PlayFootstep()
+    {
+        if (!string.IsNullOrEmpty(fmodFootstepSound))
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(fmodFootstepSound, transform.position);
+        }
     }
 }

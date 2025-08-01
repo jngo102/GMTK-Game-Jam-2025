@@ -47,15 +47,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anchor: {fileID: 0}
   mouseTrackSpeedMultiplier: 8
-  maxLassoDistance: 4
+  maxLassoDistance: 8
   playerAnim: {fileID: 0}
   playerSprite: {fileID: 0}
+  playerFacer: {fileID: 0}
   playerSpinUpSprite: {fileID: -7031361693094701683, guid: ea1389bea64a4c94cb8269f2b63db0c2, type: 3}
   playerSpinDownSprite: {fileID: 5117147999720684754, guid: ea1389bea64a4c94cb8269f2b63db0c2, type: 3}
   playerSpinLeftSprite: {fileID: -9203354262010014358, guid: ea1389bea64a4c94cb8269f2b63db0c2, type: 3}
   playerSpinRightSprite: {fileID: -1827768890941952420, guid: ea1389bea64a4c94cb8269f2b63db0c2, type: 3}
   lasso: {fileID: 0}
-  spinSpeed: 270
+  fmodSpinEvent: event:/player/PSpinLoop
+  spinTimeScale: 4
+  spinTimeLogFactor: 10
   isSpinning: 0
 --- !u!120 &2664500622593540442
 LineRenderer:

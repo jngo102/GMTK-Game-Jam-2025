@@ -1,12 +1,11 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CircleCollider2D))]
 public class Lassoable : MonoBehaviour
 {
     public Animator animator;
-    public CircleCollider2D Collider { get; private set; }
+    public Collider2D Collider { get; private set; }
 
-    public float weight = 1;
+    public DeathManager death;
 
     public Mover mover;
 
@@ -22,7 +21,7 @@ public class Lassoable : MonoBehaviour
 
     private void Awake()
     {
-        Collider = GetComponent<CircleCollider2D>();
+        Collider = GetComponent<Collider2D>();
     }
 
     public void GetLassoed()

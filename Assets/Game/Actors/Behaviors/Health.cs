@@ -20,6 +20,8 @@ public class Health : MonoBehaviour
     /// </summary>
     [SerializeField] private float maxHealth = 5;
 
+    public string fmodHitEvent;
+    
     /// <summary>
     ///     The amount of time that the actor is invincible for after taking damage.
     /// </summary>
@@ -92,6 +94,11 @@ public class Health : MonoBehaviour
         if (damageSource)
         {
             facer.FaceObject(damageSource.transform);
+        }
+
+        if (!string.IsNullOrEmpty(fmodHitEvent))
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(fmodHitEvent, transform.position);
         }
 
         CurrentHealth -= Mathf.Clamp(damageAmount, 0, CurrentHealth);
