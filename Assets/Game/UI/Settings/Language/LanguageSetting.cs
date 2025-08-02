@@ -1,7 +1,6 @@
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 
 /// <summary>
 ///     Controller for the language dropdown setting.
@@ -30,7 +29,7 @@ public class LanguageSetting : MonoBehaviour, ISaveable {
     ///     Set the current locale to that of the dropdown's value.
     /// </summary>
     public void SetLanguage() {
-        LocalizationSettings.SelectedLocale =
-            LocalizationSettings.AvailableLocales.GetLocale(dropdown.options[dropdown.value].text);
+        // LocalizationSettings.SelectedLocale =
+        //     LocalizationSettings.AvailableLocales.GetLocale(dropdown.options[dropdown.value].text);
     }
 }

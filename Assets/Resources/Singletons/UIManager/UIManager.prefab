@@ -171,8 +171,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smoothing: 0.5
   offset: {x: 0, y: 0, z: -10}
-  minHeight: 4
-  maxHeight: 16
+  minHeight: 6
+  maxHeight: 24
   shaker: {fileID: 8061945704119233197}
 --- !u!1 &3029344966216623841
 GameObject:

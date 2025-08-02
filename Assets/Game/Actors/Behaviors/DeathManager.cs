@@ -12,7 +12,11 @@ public class DeathManager : MonoBehaviour {
 
     [SerializeField] private Health health;
 
+    public Animator animator;
+    
     public GameObject deathObj;
+
+    public string deathAnim;
 
     /// <summary>
     ///     Whether the actor is dead.
@@ -21,13 +25,13 @@ public class DeathManager : MonoBehaviour {
 
     private void Awake() {
         // Check whether the actor should be dead every time it takes damage.
-        health.Harmed += CheckDead;
+        health.Harmed.AddListener(CheckDead);
     }
 
     /// <summary>
     ///     Raised when the actor has died.
     /// </summary>
-    public UnityAction Died;
+    public UnityEvent Died;
 
     /// <summary>
     ///     Check whether the actor's health has reached zero.
@@ -51,10 +55,15 @@ public class DeathManager : MonoBehaviour {
             var corpse = Instantiate(corpsePrefab, transform.position, Quaternion.identity);
             corpse.GetComponent<Facer>().FaceObject(damageSource.transform);
         }
-
-        if (deathObj)
+        
+        var deathSpin = GetComponent<DeathSpin>();
+        if (!string.IsNullOrEmpty(deathAnim))
         {
-            Destroy(deathObj);   
+            animator.Play(deathAnim);
+        }
+        else if (deathObj && !deathSpin)
+        {
+            Destroy(deathObj);
         }
     }
 

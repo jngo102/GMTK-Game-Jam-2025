@@ -78,9 +78,9 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1609630565
-  m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingLayerID: -1567965235
+  m_SortingLayer: 1
+  m_SortingOrder: -1
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 5, y: 0, z: 0}
@@ -226,9 +226,10 @@ MonoBehaviour:
   edgeCollider: {fileID: 1816394784658641640}
   line: {fileID: 2411260276500031805}
   body: {fileID: 8543788322683253832}
+  damageCollider: {fileID: 3613214404438812235}
   lassoed: []
-  hitShakeMultiplier: 0.005
-  hitStopMultiplier: 0.02
+  hitShakeMultiplier: 0.015
+  hitStopMultiplier: 0.05
   damageSpeedMultiplier: 2
   damager: {fileID: 7129250917019637877}
   velocity: {x: 0, y: 0}
@@ -301,7 +302,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5398702092211619620}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -343,6 +344,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageAmount: 1
+  Damaged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2700707560014586771
 MonoBehaviour:
   m_ObjectHideFlags: 0

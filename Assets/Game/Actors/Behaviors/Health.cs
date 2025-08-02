@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,9 +7,11 @@ using UnityEngine.Events;
 /// </summary>
 public class Health : MonoBehaviour
 {
-    public UnityAction<float, Damager> Harmed;
+    public UnityEvent<float, Damager> Harmed;
 
-    public UnityAction<float, float> HealthChanged;
+    public UnityEvent<float, float> HealthChanged;
+
+    public bool shakeOnHit;
 
     /// <summary>
     ///     The actor's current health.
@@ -83,6 +86,11 @@ public class Health : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        CanBeHurt = false;
+    }
+
     /// <summary>
     ///     Damage and take health away from the actor.
     /// </summary>
@@ -105,6 +113,12 @@ public class Health : MonoBehaviour
         Harmed?.Invoke(damageAmount, damageSource);
         CanBeHurt = false;
         currentInvincibilityTime = 0;
+
+        if (shakeOnHit)
+        {
+            UIManager.Instance.camera.shaker.StartShake(0.25f, 0.25f);
+            GameManager.Instance.HitStop();
+        }
     }
 
     /// <summary>

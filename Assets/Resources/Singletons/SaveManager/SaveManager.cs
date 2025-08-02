@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Sirenix.Serialization;
 using UnityEngine;
 
 public class SaveManager : Singleton<SaveManager>
 {
-    private static string saveFilePath => Path.Combine(Application.persistentDataPath, "data.bin");
+    private static string saveFilePath => Path.Combine(Application.persistentDataPath, "data.json");
     
     public static SaveData SaveData { get; private set; }
 
@@ -22,8 +21,8 @@ public class SaveManager : Singleton<SaveManager>
             SaveData = new SaveData();
             return;
         }
-        var saveBytes = File.ReadAllBytes(saveFilePath);
-        SaveData = SerializationUtility.DeserializeValue<SaveData>(saveBytes, DataFormat.Binary) ?? new SaveData();
+        var saveJson = File.ReadAllText(saveFilePath);
+        SaveData = JsonUtility.FromJson<SaveData>(saveJson) ?? new SaveData();
         
         var saveables = GetSaveables();
         foreach (var saveable in saveables)
@@ -45,8 +44,8 @@ public class SaveManager : Singleton<SaveManager>
             saveable.SaveData(SaveData);
         }
         
-        var saveBytes = SerializationUtility.SerializeValue(SaveData, DataFormat.Binary);
-        File.WriteAllBytes(saveFilePath, saveBytes);
+        var saveJson = JsonUtility.ToJson(SaveData);
+        File.WriteAllText(saveFilePath, saveJson);
     }
 
     private IEnumerable<ISaveable> GetSaveables()

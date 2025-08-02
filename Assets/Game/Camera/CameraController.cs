@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
     {
         camera = GetComponent<Camera>();
         shaker = GetComponent<Shaker>();
-        GameManager.Instance.LevelStarted += ResetPosition;
+        GameManager.Instance.LevelStarted.AddListener(ResetPosition);
     }
 
     private void LateUpdate()

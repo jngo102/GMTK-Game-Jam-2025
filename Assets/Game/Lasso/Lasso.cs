@@ -9,6 +9,7 @@ public class Lasso : MonoBehaviour
     public EdgeCollider2D edgeCollider;
     public LineRenderer line;
     public Rigidbody2D body;
+    public Collider2D damageCollider;
 
     public List<Lassoable> lassoed = new();
 
@@ -32,7 +33,7 @@ public class Lasso : MonoBehaviour
     {
         edgeCollider = GetComponent<EdgeCollider2D>();
         line = GetComponent<LineRenderer>();
-        damager.Damaged += LassoHit;
+        damager.Damaged.AddListener(LassoHit);
     }
 
     private void Update()
@@ -44,15 +45,18 @@ public class Lasso : MonoBehaviour
     private void LassoHit(Health health, float damageAmount)
     {
         var lassoable = health.GetComponentInParent<Lassoable>();
-        if (lassoable && lassoed.Contains(lassoable) || health.CompareTag("Player"))
+        if (lassoable)
         {
-            return;
+            if (lassoed.Contains(lassoable) || health.CompareTag("Player"))
+            {
+                return;
+            }
+            
+            lassoable.body.AddForce(velocity, ForceMode2D.Impulse);
         }
 
-        lassoable.body.AddForce(velocity, ForceMode2D.Impulse);
-
         UIManager.Instance.camera.shaker.StartShake(LassoedCount * hitShakeMultiplier * LassoedCount * Speed, 0.25f);
-        GameManager.Instance.HitStop(hitStopMultiplier * LassoedCount * Speed);
+        GameManager.Instance.HitStop(0.025f);
     }
 
     public void RepositionCenter()
@@ -71,5 +75,10 @@ public class Lasso : MonoBehaviour
         }
         
         UIManager.Instance.camera.AddTarget(transform);
+    }
+
+    public void EnableDamager()
+    {
+        damageCollider.enabled = true;
     }
 }

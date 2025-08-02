@@ -16,7 +16,7 @@ public class DialogueManager : BaseUI {
     /// <summary>
     ///     The currently displayed, translated dialogue text.
     /// </summary>
-    private string CurrentText => currentDialogue.pages[currentPage].GetLocalizedString();
+    // private string CurrentText => currentDialogue.pages[currentPage].GetLocalizedString();
 
     /// <inheritdoc />
     public override void Open() {
@@ -45,7 +45,7 @@ public class DialogueManager : BaseUI {
     public void StartDialogue(Dialogue dialogue) {
         currentDialogue = dialogue;
         currentPage = 0;
-        typer.Type(CurrentText);
+        // typer.Type(CurrentText);
     }
 
     /// <summary>
@@ -53,12 +53,12 @@ public class DialogueManager : BaseUI {
     /// </summary>
     private void NextPage() {
         currentPage++;
-        if (currentPage >= currentDialogue.pages.Length) {
-            Close();
-            return;
-        }
+        // if (currentPage >= currentDialogue.pages.Length) {
+        //     Close();
+        //     return;
+        // }
 
-        typer.Type(CurrentText);
+        // typer.Type(CurrentText);
     }
 
     /// <summary>

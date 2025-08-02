@@ -13,9 +13,11 @@ public class LassoSpinner : MonoBehaviour
 
     public float maxLassoDistance = 4;
 
-    public Animator playerAnim;
-    public SpriteRenderer playerSprite;
-    public Facer playerFacer;
+    public GameObject player;
+    private Animator playerAnim;
+    private SpriteRenderer playerSprite;
+    private Facer playerFacer;
+    private DeathManager playerDeath;
     public Sprite playerSpinUpSprite;
     public Sprite playerSpinDownSprite;
     public Sprite playerSpinLeftSprite;
@@ -65,6 +67,13 @@ public class LassoSpinner : MonoBehaviour
     private void Awake()
     {
         line = GetComponent<LineRenderer>();
+        
+        playerAnim = player.GetComponent<Animator>();
+        playerSprite = player.GetComponent<SpriteRenderer>();
+        playerFacer =  player.GetComponent<Facer>();
+        playerDeath = player.GetComponentInChildren<DeathManager>();
+
+        playerDeath.Died.AddListener(StopSpinning);
     }
 
     private void LateUpdate()
@@ -85,8 +94,6 @@ public class LassoSpinner : MonoBehaviour
                                       targetLassoVectorLength;
             var nextLassoPosition = Vector3.Lerp(lasso.transform.position, targetLassoPosition,
                 mouseTrackSpeedMultiplier * Time.deltaTime / TotalMass);
-
-            // Debug.Log("Next Lasso pos: " +  nextLassoPosition);
 
             var velocity = nextLassoPosition - previousLassoPosition;
             lasso.velocity = velocity;
@@ -142,6 +149,15 @@ public class LassoSpinner : MonoBehaviour
             this.lassoed.Add(target);
         }
         lassoedOffsets = this.lassoed.Select(target => target.transform.position - lasso.transform.position).ToList();
+
+        var numLassoed = this.lassoed.Count;
+        lasso.line.positionCount = numLassoed + 1;
+        lasso.line.SetPosition(0, Vector3.zero);
+        for (var i = 0; i < numLassoed; i++)
+        {
+            var lassoedPos = this.lassoed[i].transform.position - lasso.transform.position;
+            lasso.line.SetPosition(i + 1, lassoedPos);
+        }
     }
 
     public void StopSpinning()

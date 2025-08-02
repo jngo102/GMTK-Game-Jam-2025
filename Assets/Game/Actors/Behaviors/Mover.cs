@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,7 +7,8 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Facer))]
-public class Mover : MonoBehaviour {
+public class Mover : MonoBehaviour
+{
     /// <summary>
     ///     The speed at which the actor moves.
     /// </summary>
@@ -15,30 +17,42 @@ public class Mover : MonoBehaviour {
     [SerializeField] private Animator animator;
 
     [SerializeField] private string moveAnim;
-    
+
     [SerializeField] private string idleAnim;
 
     public string fmodFootstepSound;
-    
+
     private Rigidbody2D body;
     private Facer facer;
 
-    private void Awake() {
+    private void Awake()
+    {
         body = GetComponent<Rigidbody2D>();
         facer = GetComponent<Facer>();
+    }
+
+    private void OnDisable()
+    {
+        Stop();
     }
 
     /// <summary>
     ///     Perform movement.
     /// </summary>
     /// <param name="direction">The direction that the actor moves toward.</param>
-    public void Move(Vector2 direction) {
+    public void Move(Vector2 direction)
+    {
         var velocity = direction * moveSpeed;
         if (animator)
         {
             animator.Play(moveAnim);
         }
-        body.linearVelocity = velocity;
+
+        body.linearVelocity += velocity;
+        if ((body.linearVelocity - velocity).magnitude > Mathf.Epsilon)
+        {
+            body.linearVelocity = velocity;
+        }
         var velocityX = velocity.x;
         var scaleX = transform.localScale.x;
         if ((scaleX < 0 && velocityX > 0) || (scaleX > 0 && velocityX < 0))
@@ -56,6 +70,7 @@ public class Mover : MonoBehaviour {
         {
             animator.Play(idleAnim);
         }
+
         body.linearVelocity = Vector2.zero;
     }
 

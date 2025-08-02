@@ -7,7 +7,7 @@ public class PlayerDeath : MonoBehaviour
     
     private void Awake()
     {
-        death.Died += OnPlayerDeath;
+        death.Died.AddListener(OnPlayerDeath);
     }
 
     private void OnPlayerDeath()

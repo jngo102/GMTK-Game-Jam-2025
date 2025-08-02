@@ -9,6 +9,7 @@ public class DeathSpin : MonoBehaviour
     private DeathManager death;
     private ParticleSystem particles;
     private ParticleSystemRenderer particleRenderer;
+    public Animator animator;
     public Rigidbody2D body;
     public SpriteRenderer sprite;
     public GameObject spinObj;
@@ -18,7 +19,7 @@ public class DeathSpin : MonoBehaviour
     private void Awake()
     {
         death = GetComponent<DeathManager>();
-        death.Died += StartDeathSpin;
+        death.Died.AddListener(StartDeathSpin);
         
         particles = GetComponent<ParticleSystem>();
         particleRenderer = GetComponent<ParticleSystemRenderer>();
@@ -38,25 +39,10 @@ public class DeathSpin : MonoBehaviour
 
     private void StartDeathSpin()
     {
-        foreach (var component in spinObj.GetComponentsInChildren<Component>(true))
-        {
-            if (component == this || component == body || component == particles)
-            {
-                continue;
-            }
-            if (component is MonoBehaviour behavior)
-            {
-                behavior.enabled = false;   
-            }
-        }
-        
         body.bodyType = RigidbodyType2D.Dynamic;
         body.gravityScale = 1;
         body.constraints = RigidbodyConstraints2D.None;
         isSpinning = true;
-        var currentSprite = sprite.sprite;
-        var newSprite = Sprite.Create(currentSprite.texture, currentSprite.rect, Vector2.one * 0.5f);
-        sprite.sprite = newSprite;
         var spriteColor = sprite.color;
         sprite.color = new Color(spriteColor.r, spriteColor.g, spriteColor.b, 0.5f);
         particles.Play();

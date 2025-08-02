@@ -12,7 +12,7 @@ public class Damager : MonoBehaviour {
     /// </summary>
     [SerializeField] public float damageAmount = 1;
     
-    public UnityAction<Health, float> Damaged;
+    public UnityEvent<Health, float> Damaged;
     
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.TryGetComponent<Health>(out var health))

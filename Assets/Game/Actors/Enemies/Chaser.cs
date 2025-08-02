@@ -1,11 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Mover))]
 public class Chaser : MonoBehaviour
 {
     public GameObject target;
 
-    private Mover mover;
+    [SerializeField] private Mover mover;
 
     private void Awake()
     {
@@ -19,5 +18,10 @@ public class Chaser : MonoBehaviour
             var diff = (target.transform.position - transform.position).normalized;
             mover.Move(diff);
         }
+    }
+
+    private void OnDisable()
+    {
+        mover.Stop();
     }
 }

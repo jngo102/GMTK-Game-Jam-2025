@@ -6,7 +6,7 @@ using UnityEngine.Events;
 ///     Deals with facing an actor towards a target and flipping their scale.
 /// </summary>
 public class Facer : MonoBehaviour {
-    public UnityAction Flipped;
+    public UnityEvent Flipped;
     
     [SerializeField] private Rigidbody2D body;
 

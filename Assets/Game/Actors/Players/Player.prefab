@@ -92,6 +92,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2286462321688437604, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2286462321688437604, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2286462321688437604, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 4861802183855692691, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -103,11 +115,43 @@ PrefabInstance:
     - target: {fileID: 5585190239460913493, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
       propertyPath: deathObj
       value: 
+      objectReference: {fileID: 2058965739717825337}
+    - target: {fileID: 5585190239460913493, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: deathAnim
+      value: Death
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202288474217966679, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: m_Size.x
+      value: 0.11165047
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202288474217966679, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: m_Size.y
+      value: 0.6108179
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202288474217966679, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.009306908
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202288474217966679, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.24027681
       objectReference: {fileID: 0}
     - target: {fileID: 6950118462549051694, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 146adda1d408d314699a0bc120295778, type: 2}
+    - target: {fileID: 6985194357293623396, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: maxHealth
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6985194357293623396, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: shakeOnHit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6985194357293623396, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
+      propertyPath: currentHealth
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 8652970543705278995, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
       propertyPath: m_Layer
       value: 3

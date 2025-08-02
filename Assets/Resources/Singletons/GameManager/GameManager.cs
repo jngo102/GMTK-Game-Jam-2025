@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameManager : Singleton<GameManager>
 {
-    public UnityAction LevelStarted;
+    public UnityEvent LevelStarted;
     
     /// <summary>
     ///     Change scenes with a fade transition.
@@ -68,7 +68,7 @@ public class GameManager : Singleton<GameManager>
     public void ResumeGame() {
         Time.timeScale = 1;
     }
-
+    
     public void HitStop(float duration = 0.1f)
     {
         StartCoroutine(HitStopRoutine(duration));
