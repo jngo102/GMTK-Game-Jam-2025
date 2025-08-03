@@ -62,7 +62,6 @@ public class Lassoable : MonoBehaviour
 
     public void GetLassoed()
     {
-        gettingLassoed = true;
         attacker.enabled = false;
         health.SetInvincible();
         mover.enabled = false;
