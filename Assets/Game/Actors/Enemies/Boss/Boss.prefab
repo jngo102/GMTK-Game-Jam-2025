@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 4557271210552973428, guid: c24d143d37605b14c91d393fb80ba8fc, type: 3}
+    - target: {fileID: 398227914045859346, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
+      propertyPath: scoreOnDeath
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 865566352484571314, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
       propertyPath: deathAnim
       value: Boss Death

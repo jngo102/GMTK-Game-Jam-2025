@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 3441438802487139101, guid: 0a731ada15a3783469b8e6b44aa778c7, type: 3}
+    - target: {fileID: 398227914045859346, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
+      propertyPath: scoreOnDeath
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 865566352484571314, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
       propertyPath: deathAnim
       value: Ranged Death
