@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LootDropper : MonoBehaviour
 {
     public Loot[] possibleLoot;
 
-    public float[] lootChances;
+    public float lootChance;
+
+    public int[] lootDropWeights;
 
     public DeathManager death;
 
@@ -15,16 +18,24 @@ public class LootDropper : MonoBehaviour
 
     private void CheckDropLoot()
     {
-        for (var i = 0; i < lootChances.Length; i++)
+        var value = Random.Range(0f, 1f);
+        if (value >= lootChance)
+        {
+            return;
+        }
+        
+        var loots = new List<Loot>();
+        for (var i = 0; i < lootDropWeights.Length; i++)
         {
             var currentLoot = possibleLoot[i];
-            var currentChance = lootChances[i];
-            var value = Random.Range(0f, 1f);
-            if (value < currentChance)
+            var currentWeight = lootDropWeights[i];
+
+            for (var j = 0; j < currentWeight; j++)
             {
-                SpawnLoot(currentLoot);
-                return;
+                loots.Add(currentLoot);
             }
+            var loot = loots[Random.Range(0, loots.Count)];
+            SpawnLoot(loot);
         }
     }
 

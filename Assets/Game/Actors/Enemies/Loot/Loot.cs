@@ -6,6 +6,8 @@ public class Loot : MonoBehaviour
 {
     protected virtual string Message => "Picked up loot!";
 
+    public string fmodPickupEvent;
+
     [SerializeField] private LootMessage lootMessagePrefab;
     
     private void OnTriggerEnter2D(Collider2D other)
@@ -22,6 +24,9 @@ public class Loot : MonoBehaviour
 
     public virtual void Pickup()
     {
-        
+        if (!string.IsNullOrEmpty(fmodPickupEvent))
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(fmodPickupEvent, transform.position);
+        }
     }
 }

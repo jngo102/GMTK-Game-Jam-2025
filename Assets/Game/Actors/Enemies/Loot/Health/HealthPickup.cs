@@ -8,6 +8,7 @@ public class HealthPickup : Loot
     
     public override void Pickup()
     {
+        base.Pickup();
         var player = GameObject.FindGameObjectWithTag("Player");
         var health = player.GetComponentInChildren<Health>();
         health.CurrentHealth += healthAdd;

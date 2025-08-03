@@ -37,7 +37,7 @@ public class MainMenu : MonoBehaviour {
 
         if (SaveManager.SaveData.highScore <= 0)
         {
-            highScoreText.text = "No high score yet, try playing a game!";
+            highScoreText.text = "No high score yet!";
         }
         else
         {

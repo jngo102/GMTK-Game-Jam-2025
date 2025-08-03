@@ -6,6 +6,7 @@ public class RopePickup : Loot
 
     public override void Pickup()
     {
+        base.Pickup();
         var lassoController = FindAnyObjectByType<LassoController>();
         lassoController.maxDrawLength += ropeLengthAdd;
         var lassoSpinner = FindAnyObjectByType<LassoSpinner>();

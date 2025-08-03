@@ -94,5 +94,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e07adccf79fea418fc93e5790b154e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fmodPickupEvent: event:/player/PPickup
   lootMessagePrefab: {fileID: 1473863830949385030, guid: 67550fbcef940f5499ac9cdc31a646bb, type: 3}
   healthAdd: 1

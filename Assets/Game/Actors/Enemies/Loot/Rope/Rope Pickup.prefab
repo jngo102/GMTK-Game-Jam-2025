@@ -94,5 +94,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03df53ee52836974b93c3302c1f6978a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fmodPickupEvent: event:/player/PPickup
   lootMessagePrefab: {fileID: 1473863830949385030, guid: 67550fbcef940f5499ac9cdc31a646bb, type: 3}
   ropeLengthAdd: 0.25
