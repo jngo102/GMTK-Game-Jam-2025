@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 1113593998048660636}
-  showTime: 1
+  showTime: 2
   showHeight: 1
 --- !u!1 &8775734615962666855
 GameObject:
