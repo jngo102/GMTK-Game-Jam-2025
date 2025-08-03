@@ -93,15 +93,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             ""id"": ""6486d3bb-5340-4710-9e9f-a80bec410c34"",
             ""actions"": [
                 {
-                    ""name"": ""Lasso"",
-                    ""type"": ""Button"",
-                    ""id"": ""7ef9ebfc-a471-41a0-8354-c021b80dbef2"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""1549259d-eacd-4461-bb49-3ce273e89b43"",
@@ -112,39 +103,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""3c0355a8-611b-4279-8e14-8e646e2d499f"",
-                    ""path"": ""<Keyboard>/k"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard"",
-                    ""action"": ""Lasso"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f1683a5f-7e27-40b0-b972-6572e1a311ec"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Lasso"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3c7e2e05-69ab-435f-b5d0-d5c30b841a6f"",
-                    ""path"": ""<Keyboard>/z"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard"",
-                    ""action"": ""Lasso"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""WASD"",
                     ""id"": ""dc029a0b-3857-4712-b6c4-4d34d3eaba25"",
@@ -866,7 +824,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
 }");
         // Game
         m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
-        m_Game_Lasso = m_Game.FindAction("Lasso", throwIfNotFound: true);
         m_Game_Move = m_Game.FindAction("Move", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -961,7 +918,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     // Game
     private readonly InputActionMap m_Game;
     private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
-    private readonly InputAction m_Game_Lasso;
     private readonly InputAction m_Game_Move;
     /// <summary>
     /// Provides access to input actions defined in input action map "Game".
@@ -974,10 +930,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
         public GameActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "Game/Lasso".
-        /// </summary>
-        public InputAction @Lasso => m_Wrapper.m_Game_Lasso;
         /// <summary>
         /// Provides access to the underlying input action "Game/Move".
         /// </summary>
@@ -1008,9 +960,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GameActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GameActionsCallbackInterfaces.Add(instance);
-            @Lasso.started += instance.OnLasso;
-            @Lasso.performed += instance.OnLasso;
-            @Lasso.canceled += instance.OnLasso;
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
@@ -1025,9 +974,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="GameActions" />
         private void UnregisterCallbacks(IGameActions instance)
         {
-            @Lasso.started -= instance.OnLasso;
-            @Lasso.performed -= instance.OnLasso;
-            @Lasso.canceled -= instance.OnLasso;
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
@@ -1292,13 +1238,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     /// <seealso cref="GameActions.RemoveCallbacks(IGameActions)" />
     public interface IGameActions
     {
-        /// <summary>
-        /// Method invoked when associated input action "Lasso" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnLasso(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

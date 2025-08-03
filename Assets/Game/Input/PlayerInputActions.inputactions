@@ -7,15 +7,6 @@
             "id": "6486d3bb-5340-4710-9e9f-a80bec410c34",
             "actions": [
                 {
-                    "name": "Lasso",
-                    "type": "Button",
-                    "id": "7ef9ebfc-a471-41a0-8354-c021b80dbef2",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Move",
                     "type": "Value",
                     "id": "1549259d-eacd-4461-bb49-3ce273e89b43",
@@ -26,39 +17,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "3c0355a8-611b-4279-8e14-8e646e2d499f",
-                    "path": "<Keyboard>/k",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard",
-                    "action": "Lasso",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f1683a5f-7e27-40b0-b972-6572e1a311ec",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Lasso",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3c7e2e05-69ab-435f-b5d0-d5c30b841a6f",
-                    "path": "<Keyboard>/z",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard",
-                    "action": "Lasso",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "WASD",
                     "id": "dc029a0b-3857-4712-b6c4-4d34d3eaba25",
