@@ -246,3 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageAmount: 1
+  Damaged:
+    m_PersistentCalls:
+      m_Calls: []
+  damageCollider: {fileID: 3151529782129220101}

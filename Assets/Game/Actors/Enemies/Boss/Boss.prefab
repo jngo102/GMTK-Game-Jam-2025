@@ -49,6 +49,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6043487601058130431, guid: e0dd89be831fc7b489eed4603703f042, type: 3}
     - target: {fileID: 1849174492817447428, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
+      propertyPath: fmodAttackEvent
+      value: event:/enemies/ESwipe
+      objectReference: {fileID: 0}
+    - target: {fileID: 1849174492817447428, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
       propertyPath: parentAttackToActor
       value: 1
       objectReference: {fileID: 0}

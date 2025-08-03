@@ -33,6 +33,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6043487601058130431, guid: 8d6ece3ad44857b4eb8bb7211f6ef138, type: 3}
     - target: {fileID: 1849174492817447428, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
+      propertyPath: fmodAttackEvent
+      value: event:/enemies/ESwipe
+      objectReference: {fileID: 0}
+    - target: {fileID: 1849174492817447428, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
       propertyPath: parentAttackToActor
       value: 1
       objectReference: {fileID: 0}
@@ -110,7 +114,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8012361795285703118, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
       propertyPath: m_Radius
-      value: 0.25
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 8976014177168439318, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

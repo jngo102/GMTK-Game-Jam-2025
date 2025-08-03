@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(DeathManager))]
@@ -35,6 +36,16 @@ public class DeathSpin : MonoBehaviour
                 Destroy(spinObj);
             }
         }
+    }
+
+    private void OnDisable()
+    {
+        body.gravityScale = 0;
+        body.constraints = RigidbodyConstraints2D.FreezeRotation;
+        isSpinning = false;
+        particles.Stop();
+        sprite.color = Color.white;
+        body.transform.rotation = Quaternion.Euler(Vector3.zero);
     }
 
     private void StartDeathSpin()

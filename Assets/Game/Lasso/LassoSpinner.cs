@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(LineRenderer))]
 public class LassoSpinner : MonoBehaviour
@@ -12,6 +13,10 @@ public class LassoSpinner : MonoBehaviour
     public float mouseTrackSpeedMultiplier = 8;
 
     public float maxLassoDistance = 4;
+
+    public float velocityMultiplier = 32;    
+    
+    public float throwMinForce = 5;
 
     public GameObject player;
     private Animator playerAnim;
@@ -29,14 +34,15 @@ public class LassoSpinner : MonoBehaviour
     private List<Lassoable> lassoed = new();
     private List<Vector3> lassoedOffsets;
 
-    private Damager LassoDamager => lasso?.GetComponent<Damager>();
+    private Collider2D lassoDamageCollider;
 
     private float TotalMass => lassoed.Sum(target => target.body.mass);
 
+    public bool isThrowing;
+
     private LineRenderer line;
 
-    [Header("Audio")]
-    public string fmodSpinEvent;
+    [Header("Audio")] public string fmodSpinEvent;
 
     public float spinTimeScale = 4;
     public float spinTimeLogFactor = 10;
@@ -67,10 +73,10 @@ public class LassoSpinner : MonoBehaviour
     private void Awake()
     {
         line = GetComponent<LineRenderer>();
-        
+
         playerAnim = player.GetComponent<Animator>();
         playerSprite = player.GetComponent<SpriteRenderer>();
-        playerFacer =  player.GetComponent<Facer>();
+        playerFacer = player.GetComponent<Facer>();
         playerDeath = player.GetComponentInChildren<DeathManager>();
 
         playerDeath.Died.AddListener(StopSpinning);
@@ -78,11 +84,11 @@ public class LassoSpinner : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!lasso && isSpinning)
+        if (!lasso && isSpinning && !isThrowing)
         {
             StopSpinning();
         }
-        else if (isSpinning)
+        else if (isSpinning && !isThrowing)
         {
             line.SetPosition(0, anchor.position);
 
@@ -95,8 +101,8 @@ public class LassoSpinner : MonoBehaviour
             var nextLassoPosition = Vector3.Lerp(lasso.transform.position, targetLassoPosition,
                 mouseTrackSpeedMultiplier * Time.deltaTime / TotalMass);
 
-            var velocity = nextLassoPosition - previousLassoPosition;
-            lasso.velocity = velocity;
+            var velocity = (nextLassoPosition - previousLassoPosition) * Time.deltaTime;
+            lasso.velocity = velocityMultiplier * velocity;
             lasso.transform.position = nextLassoPosition;
 
             line.SetPosition(1, nextLassoPosition);
@@ -111,9 +117,15 @@ public class LassoSpinner : MonoBehaviour
                     new Vector3(nextLassoPosition.x, nextLassoPosition.y, 0) + lassoedOffsets[i];
             }
 
+            UpdateThrow();
+
             UpdatePlayerSprite(anchorToMouseAngle);
 
             UpdateSpinSound(velocity.magnitude);
+        }
+        else if (isThrowing)
+        {
+            isThrowing = false;
         }
     }
 
@@ -138,6 +150,7 @@ public class LassoSpinner : MonoBehaviour
         line.SetPosition(1, lasso.transform.position);
         isSpinning = true;
         this.lasso = lasso;
+        lassoDamageCollider = this.lasso.damageCollider;
         foreach (var target in lassoed)
         {
             if (target.death.IsDead)
@@ -145,10 +158,28 @@ public class LassoSpinner : MonoBehaviour
                 target.LassoReleased();
                 continue;
             }
-            
+
+            Physics2D.IgnoreCollision(lassoDamageCollider, target.health.collider);
             this.lassoed.Add(target);
+            target.death.Died.AddListener(() =>
+            {
+                var index = this.lassoed.IndexOf(target);
+                if (index >= 0)
+                {
+                    this.lassoed.RemoveAt(index);
+                    lassoedOffsets.RemoveAt(index);
+                }
+
+                if (this.lassoed.Count <= 0)
+                {
+                    StopSpinning();
+                }
+            });
         }
+
         lassoedOffsets = this.lassoed.Select(target => target.transform.position - lasso.transform.position).ToList();
+
+        lasso.lassoed = new List<Lassoable>(this.lassoed);
 
         var numLassoed = this.lassoed.Count;
         lasso.line.positionCount = numLassoed + 1;
@@ -169,8 +200,58 @@ public class LassoSpinner : MonoBehaviour
         playerFacer.enabled = true;
         foreach (var target in lassoed)
         {
+            Physics2D.IgnoreCollision(lassoDamageCollider, target.health.collider, false);
             target.LassoReleased();
         }
+
+        lassoed.Clear();
+        if (lasso)
+        {
+            Destroy(lasso.gameObject);   
+        }
+    }
+
+    private void UpdateThrow()
+    {
+        if (Mouse.current.leftButton.isPressed && !isThrowing)
+        {
+            if (lasso.velocity.magnitude * lassoed.Count >= throwMinForce)
+            {
+                ThrowLassoed();
+            }
+            else
+            {
+                isThrowing = false;
+                StopSpinning();
+            }
+        }
+    }
+
+    private void ThrowLassoed()
+    {
+        isThrowing = true;
+        if (lasso)
+        {
+            Destroy(lasso.gameObject);   
+        }
+        foreach (var target in lassoed)
+        {
+            foreach (var other in lassoed)
+            {
+                Physics2D.IgnoreCollision(other.lassoThrowDamager.damageCollider, target.lassoThrowDamager.damageCollider);
+            }
+            var velocity = lasso.velocity;
+            var speed = velocity.magnitude;
+            var angle = Mathf.Atan2(velocity.y, velocity.x);
+            angle += Random.Range(-Mathf.PI / 12, Mathf.PI / 12);
+            velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * speed;
+            target.Throw(velocity);
+        }
+        isSpinning = false;
+        line.positionCount = 0;
+        line.SetPositions(Array.Empty<Vector3>());
+        playerAnim.enabled = true;
+        playerFacer.enabled = true;
         lassoed.Clear();
     }
 
@@ -203,17 +284,17 @@ public class LassoSpinner : MonoBehaviour
             }
         }
     }
-    
+
     private void UpdateSpinSound(float lassoSpeed)
     {
         if (!string.IsNullOrEmpty(fmodSpinEvent) && playerSprite)
         {
-            spinEventTime = Mathf.Log(spinTimeScale * lassoed.Count / lasso.velocity.magnitude, spinTimeLogFactor);
+            spinEventTime = Mathf.Log(spinTimeScale * lassoed.Count / lassoSpeed, spinTimeLogFactor);
             spinTimer += Time.deltaTime;
             if (spinTimer >= spinEventTime)
             {
                 spinTimer = 0;
-                
+
                 FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Force", TotalMass);
                 FMODUnity.RuntimeManager.PlayOneShot(fmodSpinEvent, playerSprite.transform.position);
             }

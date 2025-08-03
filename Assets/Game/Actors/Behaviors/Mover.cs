@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -12,7 +10,9 @@ public class Mover : MonoBehaviour
     /// <summary>
     ///     The speed at which the actor moves.
     /// </summary>
-    [SerializeField] private float moveSpeed = 5;
+    [SerializeField] private float minMoveSpeed = 5;
+    
+    [SerializeField] private float maxMoveSpeed = 10;
 
     [SerializeField] private Animator animator;
 
@@ -22,6 +22,8 @@ public class Mover : MonoBehaviour
 
     public string fmodFootstepSound;
 
+    private float moveSpeed;
+
     private Rigidbody2D body;
     private Facer facer;
 
@@ -29,6 +31,8 @@ public class Mover : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         facer = GetComponent<Facer>();
+        
+        moveSpeed = Random.Range(minMoveSpeed, maxMoveSpeed);
     }
 
     private void OnDisable()
@@ -62,8 +66,7 @@ public class Mover : MonoBehaviour
     }
 
     /// <summary>
-    ///     Stop moving.
-    /// </summary>
+    ///     Stop moving./// </summary>
     public void Stop()
     {
         if (animator)

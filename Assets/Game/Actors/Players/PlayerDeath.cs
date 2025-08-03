@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerDeath : MonoBehaviour
@@ -24,5 +25,13 @@ public class PlayerDeath : MonoBehaviour
                 behavior.enabled = false;
             }
         }
+
+        StartCoroutine(DelayedRestart());
+    }
+
+    private IEnumerator DelayedRestart()
+    {
+        yield return new WaitForSeconds(4f);
+        SceneChanger.Instance.ChangeScene("Arena");
     }
 }

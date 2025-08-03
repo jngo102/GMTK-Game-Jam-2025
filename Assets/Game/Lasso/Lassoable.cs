@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Lassoable : MonoBehaviour
 {
@@ -8,7 +10,13 @@ public class Lassoable : MonoBehaviour
     public Collider2D Collider { get; private set; }
     
     public DeathManager death;
+    
+    public Damager lassoThrowDamager;
 
+    public bool isThrown;
+
+    public UnityEvent Thrown;
+    
     public Sprite lassoedSprite;
 
     public Mover mover;
@@ -28,13 +36,36 @@ public class Lassoable : MonoBehaviour
     private void Awake()
     {
         Collider = GetComponent<Collider2D>();
+        Physics2D.IgnoreCollision(lassoThrowDamager.damageCollider, health.collider);
+        lassoThrowDamager.Damaged.AddListener((otherHealth, _) =>
+        {
+            if (otherHealth.GetComponentInParent<Lassoable>().isThrown)
+            {
+                return;
+            }
+            animator.enabled = true;
+            lassoThrowDamager.gameObject.SetActive(false);
+            otherHealth.InstantKill();
+            health.InstantKill();
+        });
+    }
+
+    private void Update()
+    {
+        if (isThrown)
+        {
+            if (!sprite.isVisible && !death.IsDead)
+            {
+                health.InstantKill();
+            }
+        }
     }
 
     public void GetLassoed()
     {
         gettingLassoed = true;
         attacker.enabled = false;
-        health.enabled = false;
+        health.SetInvincible();
         mover.enabled = false;
         animator.StopPlayback();
         animator.enabled = false;
@@ -46,7 +77,15 @@ public class Lassoable : MonoBehaviour
         animator.enabled = true;
         attacker.enabled = true;
         gettingLassoed = false;
-        health.enabled = true;
+        health.SetInvincible(false);
         mover.enabled = true;
+    }
+
+    public void Throw(Vector2 velocity)
+    {
+        Thrown?.Invoke();
+        gettingLassoed = false;
+        isThrown = true;
+        body.linearVelocity = velocity;
     }
 }

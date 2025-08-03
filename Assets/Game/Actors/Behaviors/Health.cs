@@ -11,6 +11,8 @@ public class Health : MonoBehaviour
 
     public UnityEvent<float, float> HealthChanged;
 
+    public Collider2D collider;
+
     public bool shakeOnHit;
 
     /// <summary>
@@ -138,10 +140,16 @@ public class Health : MonoBehaviour
         Heal(MaxHealth - CurrentHealth);
     }
 
+    public void SetInvincible(bool invincible = true)
+    {
+        collider.enabled = invincible;
+    }
+
     /// <summary>
     ///     Instantly take away all of the actor's health.
     /// </summary>
-    public void InstantKill()
+    public void 
+        InstantKill()
     {
         Hurt(CurrentHealth, null);
     }

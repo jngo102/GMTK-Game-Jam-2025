@@ -24,12 +24,16 @@ public class Attacker : MonoBehaviour
 
     public UnityEvent AttackEnded;
 
+    public Transform target;
+    
+    public string fmodAttackEvent;
+
     private void OnDisable()
     {
         DestroyAttack();
     }
 
-    public void Attack(Transform target)
+    public void Attack()
     {
         if (animator.IsPlaying(attackAnim))
         {
@@ -50,6 +54,8 @@ public class Attacker : MonoBehaviour
         {
             currentAttack.transform.SetParent(attackOffset);
         }
+        
+        FMODUnity.RuntimeManager.PlayOneShot(fmodAttackEvent, transform.position);
     }
 
     public void DestroyAttack()

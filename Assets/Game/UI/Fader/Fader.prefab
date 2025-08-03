@@ -146,7 +146,7 @@ SortingGroup:
   m_GameObject: {fileID: 6486900153834850237}
   m_Enabled: 1
   m_SortingLayerID: 1609630565
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 1000
   m_SortAtRoot: 0
 --- !u!114 &7805404388369253415
@@ -195,7 +195,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -645, y: 0}
   m_SizeDelta: {x: 960, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4685428388743619617
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 446800865075235414, guid: 42cbe71190e3cb342ae842f789b58be5, type: 3}
+  m_Sprite: {fileID: -3803441764975500669, guid: 1c411d99f52ffe148a3f9daaf9f9ff49, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

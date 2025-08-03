@@ -7,6 +7,7 @@ using UnityEngine;
 public class Lasso : MonoBehaviour
 {
     public EdgeCollider2D edgeCollider;
+    public Health health;
     public LineRenderer line;
     public Rigidbody2D body;
     public Collider2D damageCollider;
@@ -24,6 +25,8 @@ public class Lasso : MonoBehaviour
     public Damager damager;
 
     public Vector2 velocity;
+
+    public bool thrown;
 
     private float Speed => velocity.magnitude;
 
@@ -54,8 +57,10 @@ public class Lasso : MonoBehaviour
             
             lassoable.body.AddForce(velocity, ForceMode2D.Impulse);
         }
+        
+        HurtRandomLassoed(damageAmount);
 
-        UIManager.Instance.camera.shaker.StartShake(LassoedCount * hitShakeMultiplier * LassoedCount * Speed, 0.25f);
+        UIManager.Instance.camera.shaker.StartShake(0.1f, 0.25f);
         GameManager.Instance.HitStop(0.025f);
     }
 
@@ -76,9 +81,16 @@ public class Lasso : MonoBehaviour
         
         UIManager.Instance.camera.AddTarget(transform);
     }
-
+    
     public void EnableDamager()
     {
         damageCollider.enabled = true;
+    }
+
+    private Lassoable HurtRandomLassoed(float damage)
+    {
+        var target = lassoed[Random.Range(0, lassoed.Count)];
+        target.health.Hurt(damage, null);
+        return target;
     }
 }

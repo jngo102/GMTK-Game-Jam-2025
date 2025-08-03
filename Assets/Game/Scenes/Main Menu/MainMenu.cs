@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,8 @@ public class MainMenu : MonoBehaviour {
     /// </summary>
     [SerializeField] private Button exitButton;
 
+    [SerializeField] private TextMeshProUGUI highScoreText;
+
     /// <summary>
     ///     A stack that keeps track of the pages that the player has visited.
     /// </summary>
@@ -31,6 +34,15 @@ public class MainMenu : MonoBehaviour {
 
         // Initially add home page to stack
         menuStack.Push(homePage);
+
+        if (SaveManager.SaveData.highScore <= 0)
+        {
+            highScoreText.text = "No high score yet, try playing a game!";
+        }
+        else
+        {
+            highScoreText.text = SaveManager.SaveData.highScore.ToString();   
+        }
     }
 
     private void OnEnable() {

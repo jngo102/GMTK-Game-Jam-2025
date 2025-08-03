@@ -1,8 +1,6 @@
-using System;
+
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UI;
 
 /// <summary>
 ///     Controller for the fader user interface.
@@ -40,6 +38,7 @@ public class Fader : BaseUI {
     /// <returns></returns>
     public IEnumerator FadeOut() {
         animator.Play("Fade Out");
+        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1);
         yield return new WaitUntil(() => animator.IsFinished());
         base.Close();
     }

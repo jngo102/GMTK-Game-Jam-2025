@@ -45,6 +45,10 @@ public class LassoController : MonoBehaviour
 
     private float lineLength;
 
+    private Transform player;
+
+    private Camera mainCam;
+
     private float ShrinkTime => lineLength * lassoShrinkTimeFactor;
 
     public List<Lassoable> LassoedTargets { get; } = new();
@@ -70,19 +74,28 @@ public class LassoController : MonoBehaviour
 
     private void Start()
     {
-        var player = GameObject.FindGameObjectWithTag("Player");
-        mouseTracker.position = player.transform.position;
+        mainCam = Camera.main;
+        
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        mouseTracker.position = player.position;
     }
 
     void Update()
     {
-        var mouseWorldPos = Camera.main.ScreenToWorldPoint(MousePosition);
+        var mouseWorldPos = mainCam.ScreenToWorldPoint(MousePosition);
+        var newMouseTrackerPos = mouseWorldPos;
+        var offset = newMouseTrackerPos - player.position;
+        if (offset.magnitude > 4 * spinner.maxLassoDistance)
+        {
+            var angle = Mathf.Atan2(offset.y, offset.x);
+            newMouseTrackerPos = player.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * spinner.maxLassoDistance;
+        } 
         if (mouseTracker)
         {
-            mouseTracker.position = Vector3.Lerp(mouseTracker.position, mouseWorldPos, 4 * Time.deltaTime);
+            mouseTracker.position = Vector3.Lerp(mouseTracker.position, newMouseTrackerPos, 4 * Time.deltaTime);
         }
 
-        if (MouseButtonHeld && !drawingLasso)
+        if (MouseButtonHeld && !drawingLasso && !spinner.isSpinning && !spinner.isThrowing)
         {
             StartDrawingLasso();
         }

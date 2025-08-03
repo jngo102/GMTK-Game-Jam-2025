@@ -35,6 +35,12 @@ public class PauseMenu : BaseUI {
         GameManager.Instance.PauseGame();
     }
 
+    public void Restart()
+    {
+        Close();
+        SceneChanger.Instance.ChangeScene("Arena");
+    }
+
     /// <inheritdoc />
     public override void Close() {
         base.Close();
@@ -63,6 +69,6 @@ public class PauseMenu : BaseUI {
     public void ExitToMainMenu() {
         CloseExitConfirmation();
         Close();
-        GameManager.Instance.ChangeScene("MainMenu");//, SceneTransitionType.MainMenu);
+        SceneChanger.Instance.ChangeScene("Main Menu");
     }
 }

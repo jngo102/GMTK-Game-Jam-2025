@@ -24,7 +24,6 @@ public class CameraController : MonoBehaviour
     {
         camera = GetComponent<Camera>();
         shaker = GetComponent<Shaker>();
-        GameManager.Instance.LevelStarted.AddListener(ResetPosition);
     }
 
     private void LateUpdate()
@@ -139,6 +138,7 @@ public class CameraController : MonoBehaviour
     /// <returns>The center point among all targets.</returns>
     private Vector3 GetCenterPoint()
     {
+        FilterTargets();
         if (targets.Count <= 0)
         {
             return Vector3.zero;

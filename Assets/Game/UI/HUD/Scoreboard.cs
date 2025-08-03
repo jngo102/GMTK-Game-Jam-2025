@@ -1,13 +1,20 @@
+using System;
 using TMPro;
 using UnityEngine;
 
 /// <summary>
 ///     A scoreboard that displays the player's current score.
 /// </summary>
-public class Scoreboard : BaseUI {
+public class Scoreboard : MonoBehaviour {
     private int currentScore;
 
-    [SerializeField] private TextMeshPro scoreValue;
+    [SerializeField] private TextMeshProUGUI scoreValue;
+    [SerializeField] private TextMeshProUGUI multiplierValue;
+
+    public float comboTime = 0.5f;
+
+    private float comboTimer;
+    private int multiplier = 1;
     
     /// <summary>
     ///     The player's current score.
@@ -20,12 +27,46 @@ public class Scoreboard : BaseUI {
         }
     }
 
+    public int Multiplier
+    {
+        get => multiplier;
+        set
+        {
+            multiplier = value;
+            if (value <= 1)
+            {
+                multiplierValue.text = "";
+                return;
+            }
+            multiplierValue.text = $"x{value}";
+        }
+    }
+
+    private void Awake()
+    {
+        ResetScore();
+    }
+
+    private void Update()
+    {
+        comboTimer += Time.deltaTime;
+        if (comboTimer >= comboTime)
+        {
+            Multiplier = 1;
+        }
+    }
+
     /// <summary>
     ///     Add to the current score.
     /// </summary>
     /// <param name="score">The score amount to add.</param>
     public void AddScore(int score) {
-        CurrentScore += score;
+        if (comboTimer < comboTime)
+        {
+            Multiplier++;
+        }
+        comboTimer = 0;
+        CurrentScore += score * Multiplier;
     }
 
     /// <summary>
@@ -41,5 +82,6 @@ public class Scoreboard : BaseUI {
     /// </summary>
     public void ResetScore() {
         CurrentScore = 0;
+        Multiplier = 1;
     }
 }

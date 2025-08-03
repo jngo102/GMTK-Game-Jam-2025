@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &7196590217540055604
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 583338671516089933, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583338671516089933, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583338671516089933, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583338671516089933, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 583338671516089933, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583338671516089933, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583338671516089933, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583338671516089933, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583338671516089933, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583338671516089933, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1584258956125895514, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_Size.x
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 1584258956125895514, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_Size.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1584258956125895514, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -5185649437945853404, guid: 7d8cd5f1fd7b81c42a5c8cb0ea8b7882, type: 3}
+    - target: {fileID: 1584258956125895514, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7999838468407887884, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      propertyPath: m_Name
+      value: Health Pickup
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 884852358530948956, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7999838468407887884, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1996297262136705365}
+  m_SourcePrefab: {fileID: 100100000, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+--- !u!1 &926138571909478968 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7999838468407887884, guid: 499421b9bc632c842b8c20aac9ad8408, type: 3}
+  m_PrefabInstance: {fileID: 7196590217540055604}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1996297262136705365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926138571909478968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e07adccf79fea418fc93e5790b154e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lootMessagePrefab: {fileID: 1473863830949385030, guid: 67550fbcef940f5499ac9cdc31a646bb, type: 3}
+  healthAdd: 1

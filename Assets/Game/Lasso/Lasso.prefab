@@ -224,15 +224,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   edgeCollider: {fileID: 1816394784658641640}
+  health: {fileID: 0}
   line: {fileID: 2411260276500031805}
   body: {fileID: 8543788322683253832}
   damageCollider: {fileID: 3613214404438812235}
   lassoed: []
   hitShakeMultiplier: 0.015
   hitStopMultiplier: 0.05
-  damageSpeedMultiplier: 2
+  damageSpeedMultiplier: 0.5
   damager: {fileID: 7129250917019637877}
   velocity: {x: 0, y: 0}
+  thrown: 0
 --- !u!1 &5398702092211619620
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,6 +349,7 @@ MonoBehaviour:
   Damaged:
     m_PersistentCalls:
       m_Calls: []
+  damageCollider: {fileID: 3613214404438812235}
 --- !u!114 &2700707560014586771
 MonoBehaviour:
   m_ObjectHideFlags: 0

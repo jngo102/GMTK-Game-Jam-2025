@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
 
     public SpriteRenderer sprite;
     public ParticleSystemRenderer particles;
-
+    
     public float fireSpeed = 8;
     
     public void Awake()

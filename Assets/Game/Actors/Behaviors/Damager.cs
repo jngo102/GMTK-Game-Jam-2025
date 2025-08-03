@@ -1,4 +1,3 @@
-using FMOD.Studio;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,7 +12,9 @@ public class Damager : MonoBehaviour {
     [SerializeField] public float damageAmount = 1;
     
     public UnityEvent<Health, float> Damaged;
-    
+
+    public Collider2D damageCollider;
+
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.TryGetComponent<Health>(out var health))
         {

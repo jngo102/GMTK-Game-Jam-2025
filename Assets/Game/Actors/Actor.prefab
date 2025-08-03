@@ -365,6 +365,7 @@ MonoBehaviour:
   HealthChanged:
     m_PersistentCalls:
       m_Calls: []
+  collider: {fileID: 6202288474217966679}
   shakeOnHit: 0
   currentHealth: 5
   maxHealth: 5

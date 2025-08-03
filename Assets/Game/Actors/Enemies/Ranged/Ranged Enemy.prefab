@@ -32,6 +32,10 @@ PrefabInstance:
       propertyPath: attackPrefab
       value: 
       objectReference: {fileID: 8103108899421586015, guid: 7eefb694d03c7744b9242f7e40b3a751, type: 3}
+    - target: {fileID: 1849174492817447428, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
+      propertyPath: fmodAttackEvent
+      value: event:/enemies/EShot
+      objectReference: {fileID: 0}
     - target: {fileID: 2446104441251340489, guid: f61ca37dd8c46b54f95ef69acfbb3e58, type: 3}
       propertyPath: m_Controller
       value: 

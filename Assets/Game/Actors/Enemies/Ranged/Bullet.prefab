@@ -182,6 +182,7 @@ MonoBehaviour:
   Damaged:
     m_PersistentCalls:
       m_Calls: []
+  damageCollider: {fileID: 7772684031074672764}
 --- !u!198 &6089775870671870083
 ParticleSystem:
   m_ObjectHideFlags: 0

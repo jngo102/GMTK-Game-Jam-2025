@@ -7,7 +7,7 @@ public class SaveManager : Singleton<SaveManager>
 {
     private static string saveFilePath => Path.Combine(Application.persistentDataPath, "data.json");
     
-    public static SaveData SaveData { get; private set; }
+    public static SaveData SaveData { get; set; }
 
     private void Awake()
     {
