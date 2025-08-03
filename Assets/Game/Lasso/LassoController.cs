@@ -49,6 +49,10 @@ public class LassoController : MonoBehaviour
 
     private Camera mainCam;
 
+    public UnityEvent FirstLassoed;
+
+    private bool firstLassoed;
+
     private float ShrinkTime => lineLength * lassoShrinkTimeFactor;
 
     public List<Lassoable> LassoedTargets { get; } = new();
@@ -257,6 +261,12 @@ public class LassoController : MonoBehaviour
             {
                 Destroy(lasso.gameObject);
                 return;
+            }
+
+            if (!firstLassoed)
+            {
+                firstLassoed = true;
+                FirstLassoed?.Invoke();   
             }
             
             lasso.lassoed = LassoedTargets;

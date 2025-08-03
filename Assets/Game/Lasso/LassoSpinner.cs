@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
@@ -54,6 +55,10 @@ public class LassoSpinner : MonoBehaviour
     private Vector3 previousLassoPosition;
 
     private float mouseVelocity;
+
+    public UnityEvent FirstThrow;
+    
+    private bool firstThrow;
 
     private Vector3 CurrentMousePosition
     {
@@ -229,6 +234,12 @@ public class LassoSpinner : MonoBehaviour
 
     private void ThrowLassoed()
     {
+        if (!firstThrow)
+        {
+            firstThrow = true;
+            FirstThrow?.Invoke();   
+        }
+        
         isThrowing = true;
         if (lasso)
         {

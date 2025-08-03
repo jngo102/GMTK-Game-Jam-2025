@@ -19,7 +19,7 @@ MonoBehaviour:
   - {fileID: 8850347527552772502, guid: da3bbd0dd3d8b78468c07f64cd08e469, type: 3}
   - {fileID: 8513276015433446416, guid: 9a5e87f5124a73b4cbff4581d0bf4ce9, type: 3}
   maxEnemiesOfType: 240000002400000004000000
-  spawnChances: 080000000800000001000000
+  spawnChances: 040000000400000001000000
   WaveOver:
     m_PersistentCalls:
       m_Calls: []

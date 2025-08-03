@@ -39,7 +39,8 @@ public class Lassoable : MonoBehaviour
         Physics2D.IgnoreCollision(lassoThrowDamager.damageCollider, health.collider);
         lassoThrowDamager.Damaged.AddListener((otherHealth, _) =>
         {
-            if (otherHealth.GetComponentInParent<Lassoable>().isThrown)
+            var lassoable = otherHealth.GetComponentInParent<Lassoable>();
+            if (lassoable && lassoable.isThrown)
             {
                 return;
             }
