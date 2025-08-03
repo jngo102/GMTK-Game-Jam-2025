@@ -173,6 +173,15 @@ public class LassoSpinner : MonoBehaviour
                 {
                     this.lassoed.RemoveAt(index);
                     lassoedOffsets.RemoveAt(index);
+                    if (lasso)
+                    {
+                        var linePoints = new Vector3[lasso.line.positionCount];
+                        lasso.line.GetPositions(linePoints);
+                        var pointsList = linePoints.ToList();
+                        pointsList.RemoveAt(index + 1);
+                        lasso.line.positionCount = pointsList.Count;
+                        lasso.line.SetPositions(pointsList.ToArray());   
+                    }
                 }
 
                 if (this.lassoed.Count <= 0)
