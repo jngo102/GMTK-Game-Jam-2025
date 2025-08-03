@@ -78,11 +78,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 825104150841634629, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
       propertyPath: maxMoveSpeed
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 825104150841634629, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
       propertyPath: minMoveSpeed
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 825104150841634629, guid: e20693f2a8f0dc14aaee73ac0b9ffaca, type: 3}
       propertyPath: fmodFootstepSound
