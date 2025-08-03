@@ -34,9 +34,10 @@ public class LootDropper : MonoBehaviour
             {
                 loots.Add(currentLoot);
             }
-            var loot = loots[Random.Range(0, loots.Count)];
-            SpawnLoot(loot);
         }
+        
+        var loot = loots[Random.Range(0, loots.Count)];
+        SpawnLoot(loot);
     }
 
     private void SpawnLoot(Loot loot)

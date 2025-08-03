@@ -712,7 +712,7 @@ MonoBehaviour:
   - {fileID: 4005733407514827269, guid: 2cb47b4751f864e4e9eb2753cf9f9a22, type: 3}
   - {fileID: -1363972991858857487, guid: 13271f92ec953ce4ca698be61765a843, type: 3}
   - {fileID: 4700582120605518669, guid: 9a6b2bd17d2858444953ad6bd5e23bf9, type: 3}
-  lootChance: 0.035
+  lootChance: 0.05
   lootDropWeights: 0f00000014000000140000000a000000
   death: {fileID: 865566352484571314}
 --- !u!50 &7269957555178949651 stripped
