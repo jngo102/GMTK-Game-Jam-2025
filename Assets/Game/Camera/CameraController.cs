@@ -16,7 +16,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float maxHeight = 32;
 
     private List<Transform> targets = new();
-    private new Camera camera;
+    private Camera camera;
     public Shaker shaker;
     private Vector3 velocity;
 

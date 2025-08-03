@@ -6,13 +6,13 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] private Animator animator;
     [SerializeField] private string fmodHoverEvent;
 
-    public new void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
         FMODUnity.RuntimeManager.PlayOneShot(fmodHoverEvent, transform.position);
         animator.Play("Open");
     }
 
-    public new void OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData eventData)
     {
         animator.Play("Close");
     }

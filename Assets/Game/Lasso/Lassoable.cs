@@ -26,8 +26,6 @@ public class Lassoable : MonoBehaviour
     public Rigidbody2D body;
 
     public Attacker attacker;
-    
-    private bool gettingLassoed;
 
     private Vector2 targetPosition;
 
@@ -77,7 +75,6 @@ public class Lassoable : MonoBehaviour
     {
         animator.enabled = true;
         attacker.enabled = true;
-        gettingLassoed = false;
         health.SetInvincible(false);
         mover.enabled = true;
     }
@@ -85,7 +82,6 @@ public class Lassoable : MonoBehaviour
     public void Throw(Vector2 velocity)
     {
         Thrown?.Invoke();
-        gettingLassoed = false;
         isThrown = true;
         body.linearVelocity = velocity;
     }
