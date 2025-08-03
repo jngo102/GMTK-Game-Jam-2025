@@ -14,6 +14,12 @@ public class WinScreen : MonoBehaviour
     
     private IEnumerator Win()
     {
+        foreach (var enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
+        {
+            enemy.GetComponentInChildren<Health>().InstantKill();
+        }
+
+        FindAnyObjectByType<WaveManager>().currentWave = 100;
         if (scoreboard.CurrentScore >= SaveManager.SaveData.highScore)
         {
             newHighScoreText.gameObject.SetActive(true);
